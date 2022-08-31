@@ -13,7 +13,14 @@ if theKey.CheckPaid(game.Players.LocalPlayer) == true then
  Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
 
  
-end   
+end
+
+if syn then
+syn.queue_on_teleport([[
+    task.wait(3)
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/SkrillexMe/SkrillexHubFree/main/114967577')))()
+]])
+end
 
 local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
