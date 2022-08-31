@@ -287,11 +287,87 @@ for _, v in pairs(game.Workspace:GetDescendants()) do
 
 end
 
+local Tab = Window:MakeTab({
+	Name = "Maps Teleport",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Tab:AddButton({
+	Name = "Earth",
+	Callback = function()
+game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
+  	end    
+})
+
+Tab:AddButton({
+	Name = "Namek",
+	Callback = function()
+game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
+  	end    
+})
+
+Tab:AddButton({
+	Name = "Time Chamber",
+	Callback = function()
+game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
+  	end    
+})
+
+
+local Tab = Window:MakeTab({
+	Name = "Discord/Info",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Tab:AddButton({
+	Name = "Join Discord",
+	Callback = function()
+	    
+	if syn then
+	
+	syn.request(
+   {
+       Url = "http://127.0.0.1:6463/rpc?v=1",
+       Method = "POST",
+       Headers = {
+           ["Content-Type"] = "application/json",
+           ["origin"] = "https://discord.com",
+       },
+       Body = game:GetService("HttpService"):JSONEncode(
+           {
+               ["args"] = {
+                   ["code"] = "KvM87FJHEj",
+               },
+               ["cmd"] = "INVITE_BROWSER",
+               ["nonce"] = "."
+           })
+   })
+	
+	else
+	    
+	  setclipboard(tostring("https://discord.gg/KvM87FJHEj"))  
+	    
+	  	OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "Copied Link!",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})  
+	    
+	end
+
+end    
+})
+
+Tab:AddParagraph("Info","Made by Skrillex#6300")
+
 OrionLib:Init()
 
 local target = nil
 while task.wait() do
-	if autKey == true and game.PlaceId ~= 298400657 then
+	if autKey == true then
 		local str1 = nil
 		local str2 = nil
 
