@@ -17,7 +17,7 @@ end
 
 if syn then
 syn.queue_on_teleport([[
-    task.wait(10) loadstring(game:HttpGet(('https://raw.githubusercontent.com/SkrillexMe/SkrillexHubFree/main/114967577')))()
+    task.wait(15) loadstring(game:HttpGet(('https://raw.githubusercontent.com/SkrillexMe/SkrillexHubFree/main/114967577')))()
 ]])
 end
 
