@@ -301,14 +301,14 @@ game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
 })
 
 Tab:AddButton({
-	Name = "Namek",
+	Name = "Namek (3000+ Strength)",
 	Callback = function()
 game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
   	end    
 })
 
 Tab:AddButton({
-	Name = "Time Chamber",
+	Name = "Time Chamber (2500+ Strength)",
 	Callback = function()
 game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
   	end    
