@@ -1,5 +1,19 @@
+require = loadstring(game:GetObjects("rbxassetid://967517547")[1].Source)()
+local theKey = require(10759199334)
+local isPremium = false
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
-local Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+local Window = nil
+if theKey.CheckPaid(game.Players.LocalPlayer) == false then
+  
+  Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+  isPremium = true
+ 
+ else
+     
+ Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+
+ 
+end   
 
 local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
@@ -145,7 +159,7 @@ Tab:AddSlider({
 local Tab = Window:MakeTab({
 	Name = "Misc",
 	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
+	PremiumOnly = true
 })
 
 local oldPos = nil
@@ -197,6 +211,35 @@ Tab:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		InfKi = Value
+	end    
+})
+
+local FastPunch = true
+local PunchingSpeed = 0
+Tab:AddToggle({
+	Name = "Fast Punch",
+	Default = false,
+	Callback = function(Value)
+		PunchingSpeed = Value
+		
+		if Value == false then
+		   
+		   player.Data.CombatSpeed.Value = 0
+		    
+		end
+	end    
+})
+
+Tab:AddSlider({
+	Name = "Fast Punch Settings",
+	Min = 0,
+	Max = 100,
+	Default = 0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Speed",
+	Callback = function(Value)
+		PunchingSpeed = Value
 	end    
 })
 
@@ -374,6 +417,12 @@ while task.wait() do
 		
 		player.Data.Ki.Value = player.Data.MaxKi.Value
 		
+	end
+	
+	if FastPunch == true then
+	   
+	   player.Data.CombatSpeed.Value = PunchingSpeed
+	    
 	end
 	
 end
