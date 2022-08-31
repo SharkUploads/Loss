@@ -143,6 +143,24 @@ Tab:AddToggle({
 	end    
 })
 
+local InfStam = false
+Tab:AddToggle({
+	Name = "Infinite Stamina",
+	Default = false,
+	Callback = function(Value)
+		InfStam = Value
+	end    
+})
+
+local InfKi = false
+Tab:AddToggle({
+	Name = "Infinite Ki",
+	Default = false,
+	Callback = function(Value)
+		InfKi = Value
+	end    
+})
+
 
 local Tab = Window:MakeTab({
 	Name = "Teleports",
@@ -286,4 +304,17 @@ while task.wait() do
 			end
 		end
 	end
+	
+	if InfStam == true then
+		
+		player.Data.Stamina.Value = player.Data.MaxStamina.Value
+		
+	end
+	
+	if InfKi == true then
+		
+		player.Data.Ki.Value = player.Data.MaxKi.Value
+		
+	end
+	
 end
