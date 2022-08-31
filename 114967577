@@ -15,12 +15,6 @@ if theKey.CheckPaid(game.Players.LocalPlayer) == true then
  
 end
 
-if syn then
-syn.queue_on_teleport([[
-    task.wait(15) loadstring(game:HttpGet(('https://raw.githubusercontent.com/SkrillexMe/SkrillexHubFree/main/114967577')))()
-]])
-end
-
 local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
 local hum = player.Character:WaitForChild("Humanoid")
