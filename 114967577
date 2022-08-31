@@ -48,6 +48,7 @@ Tab:AddToggle({
 })
 
 local ShadowTrainFarm = false
+local ShadowTrainWait = 0
 Tab:AddToggle({
 	Name = "Fast PL Farm (Requires Shadow)",
 	Default = false,
@@ -55,6 +56,20 @@ Tab:AddToggle({
 		ShadowTrainFarm = Value
 	end    
 })
+
+Tab:AddSlider({
+	Name = "Fast PL Settings",
+	Min = 0,
+	Max = 2,
+	Default = 0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 0.01,
+	ValueName = "Seconds Between Hits",
+	Callback = function(Value)
+		ShadowTrainWait = Value
+	end    
+})
+
 
 local maxDistance = 15
 local KillAura = false
@@ -246,6 +261,8 @@ while task.wait() do
 			local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
 
 			player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
+
+            task.wait(ShadowTrainWait)
 
 			local args = {
 				[1] = shadow,
