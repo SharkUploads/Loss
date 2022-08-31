@@ -301,13 +301,6 @@ game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
 })
 
 Tab:AddButton({
-	Name = "Namek (3000+ Strength)",
-	Callback = function()
-game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
-  	end    
-})
-
-Tab:AddButton({
 	Name = "Otherworld",
 	Callback = function()
 game:GetService("TeleportService"):Teleport(4263492467, LocalPlayer)
@@ -315,11 +308,12 @@ game:GetService("TeleportService"):Teleport(4263492467, LocalPlayer)
 })
 
 Tab:AddButton({
-	Name = "Time Chamber (2500+ Strength)",
+	Name = "Namek (3000+ Strength)",
 	Callback = function()
-game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
+game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
   	end    
 })
+
 Tab:AddButton({
 	Name = "Time Chamber (2500+ Strength)",
 	Callback = function()
