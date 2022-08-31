@@ -322,7 +322,7 @@ game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
 })
 
 Tab:AddButton({
-	Name = "Time Chamber (2500+ Strength)",
+	Name = "Gravity Chamber (2500+ Strength)",
 	Callback = function()
 game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
   	end    
