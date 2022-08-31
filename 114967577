@@ -3,7 +3,7 @@ local theKey = require(10759199334)
 local isPremium = false
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = nil
-if theKey.CheckPaid(game.Players.LocalPlayer) == false then
+if theKey.CheckPaid(game.Players.LocalPlayer) == true then
   
   Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
   isPremium = true
