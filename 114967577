@@ -73,11 +73,23 @@ Tab:AddSlider({
 
 local maxDistance = 15
 local KillAura = false
+local firstTimeKillAura = false
 Tab:AddToggle({
 	Name = "Kill Aura (Low Chance Of Kick)",
 	Default = false,
 	Callback = function(Value)
 		KillAura = Value
+		
+		if firstTimeKillAura == false and Value == true then
+		firstTimeKillAura = true
+		OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "There is a little chance of you getting kicked",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+		
+		end
 	end    
 })
 
@@ -96,11 +108,23 @@ Tab:AddSlider({
 })
 
 local PlayersKillAura = false
+local firstTimeKillPlayers = false
 Tab:AddToggle({
 	Name = "Kill Aura Players",
 	Default = false,
 	Callback = function(Value)
 		PlayersKillAura = Value
+	if Value == true and firstTimeKillPlayers == false then
+	    firstTimeKillPlayers = true
+	OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "High ban risk if caught",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+
+})
+end
+		
 	end    
 })
 
@@ -176,6 +200,24 @@ Tab:AddToggle({
 	end    
 })
 
+local EspActivated = false
+local EspClicked = false
+Tab:AddButton({
+	Name = "Esp (Fates Esp)",
+	Callback = function()
+	if EspActivated == false then
+	    EspActivated = true
+	OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "Fates Esp Open",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+end    
+      		loadstring(game:HttpGet('https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua'))()
+
+  	end    
+})
 
 local Tab = Window:MakeTab({
 	Name = "Teleports",
