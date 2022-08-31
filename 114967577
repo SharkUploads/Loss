@@ -56,13 +56,45 @@ Tab:AddToggle({
 	end    
 })
 
+local maxDistance = 15
+local KillAura = false
+Tab:AddToggle({
+	Name = "Kill Aura (Low Chance Of Kick)",
+	Default = false,
+	Callback = function(Value)
+		KillAura = Value
+	end    
+})
 
-local keyPressSpeed = 0.2
+
+Tab:AddSlider({
+	Name = "Kill Aura Distance",
+	Min = 5,
+	Max = 15,
+	Default = 10,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "Meters",
+	Callback = function(Value)
+		maxDistance = Value
+	end    
+})
+
+local PlayersKillAura = false
+Tab:AddToggle({
+	Name = "Kill Aura Players",
+	Default = false,
+	Callback = function(Value)
+		PlayersKillAura = Value
+	end    
+})
+
+local keyPressSpeed = 0.1
 Tab:AddSlider({
 	Name = "Auto Gravity Chamber Speed",
 	Min = 0.1,
 	Max = 1,
-	Default = 0.2,
+	Default = 0.1,
 	Color = Color3.fromRGB(255,255,255),
 	Increment = 0.01,
 	ValueName = "Seconds",
@@ -139,6 +171,7 @@ end
 
 OrionLib:Init()
 
+local target = nil
 while task.wait() do
 	if autKey == true and game.PlaceId ~= 298400657 then
 		local str1 = nil
@@ -187,35 +220,70 @@ while task.wait() do
 			end     
 		end
 	end
-	
-	if ShadowTrainFarm == true then
-		
-		if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
-		
-		local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
-			
-		player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
-			
-	        local args = {
-					[1] = shadow,
-					[2] = {
-						["HitTime"] = 0.01,
-						["Type"] = "Normal",
-						["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-						["VictimCFrame"] = shadow.Torso.CFrame,
-						["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-						["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-						["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-						["Damage"] = 0
-					}
-				}
 
-				game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
-			
-			else
-			
-		vim:SendKeyEvent(true, "U", false, game)
-		
+	if ShadowTrainFarm == true then
+
+		if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
+
+			local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
+
+			player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
+
+			local args = {
+				[1] = shadow,
+				[2] = {
+					["HitTime"] = 0.01,
+					["Type"] = "Normal",
+					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+					["VictimCFrame"] = shadow.Torso.CFrame,
+					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+					["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+					["Damage"] = 0
+				}
+			}
+
+			game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+
+		else
+
+			vim:SendKeyEvent(true, "U", false, game)
+
 		end
+	end
+
+	if KillAura == true then
+
+		for _, v in pairs(game.Workspace:GetChildren()) do
+
+			if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
+
+				if v.Name ~= player.Name then
+					
+					if game.Players:FindFirstChild(v.Name) and PlayersKillAura == true or not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false then					
+					local distance = player:DistanceFromCharacter(v.HumanoidRootPart.Position)
+					if distance <= maxDistance then
+
+						local args = {
+							[1] = v,
+							[2] = {
+								["HitTime"] = 0,
+								["Type"] = "Normal",
+								["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+								["VictimCFrame"] = v.Torso.CFrame,
+								["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+								["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+								["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+								["Damage"] = 1000
+							}
+						}
+
+						game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+							
+						end
+					end       
+				end
+			end
 		end
+	end
 end
