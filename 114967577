@@ -563,7 +563,18 @@ if isPremium == true then
 			playerToKill = Value
 		end   
 	})
+	
+	Tab:AddButton({
+		Name = "Unlock All Quests",
+		Callback = function()
+			for _, v in pairs(game:GetService("Workspace").Quests:GetChildren()) do
 
+				v.LevelReq.Value = 0
+
+			end
+		end    
+	})
+	
 	local playerstable = {}
 	for _, v in pairs(game.Players:GetChildren()) do
 
