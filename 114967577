@@ -557,8 +557,21 @@ if isPremium == true then
 	end
 	
 	dd:Refresh(playerstable)
+	
 	players.PlayerAdded:Connect(function(plr)
+		
+		for k in pairs(playerstable) do
+			k [k] = nil
+		end
+		
+		for _, v in pairs(game.Players:GetChildren()) do
 
+			table.insert(playerstable, v.Name)
+
+		end
+		
+		dd:Refresh(playerstable)		
+		
 		if checkAdmin(plr) == true then
 
 			if dropdown2 == "Webhook" then
