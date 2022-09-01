@@ -642,7 +642,7 @@ while task.wait() do
 						local args = {
 							[1] = v,
 							[2] = {
-								["HitTime"] = 0.01,
+								["HitTime"] = 0,
 								["Type"] = "Normal",
 								["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
 								["VictimCFrame"] = v.Torso.CFrame,
