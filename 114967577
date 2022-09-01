@@ -3,11 +3,42 @@ local theKey = require(10759199334)
 local isPremium = false
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = nil
+local players = game.Players
+local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449, 1961086738}
+
+function checkAdmin(plr)
+   
+   if table.find(adminIds, plr.UserId) or plr:GetRankInGroup(2724482) >= 3 then
+       
+       return true
+       
+       else
+           
+       return false
+       
+   end
+
+end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
   
   Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
   isPremium = true
+  local players = game.Players
+
+local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449, 1961086738}
+
+for _, v in pairs(game.Players:GetChildren()) do
+if checkAdmin(v) == true then
+player:Kick()
+end
+end
+
+players.PlayerAdded:Connect(function(plr)
+if checkAdmin(plr) == true then
+player:Kick()
+end
+end)
  
  else
      
@@ -16,6 +47,7 @@ if theKey.CheckPaid(game.Players.LocalPlayer) == true then
  
 end
 
+if syn then
 local mt = getrawmetatable(game)
 make_writeable(mt)
 
@@ -30,6 +62,7 @@ mt.__namecall = newcclosure(function(self, ...)
     end
     return namecall(self, table.unpack(args))
 end)
+end
 
 local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
