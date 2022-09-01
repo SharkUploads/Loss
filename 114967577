@@ -3,6 +3,7 @@ local theKey = require(10759199334)
 local isPremium = false
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = nil
+
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
   
   Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
@@ -19,6 +20,8 @@ local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
 local hum = player.Character:WaitForChild("Humanoid")
 local healing = false
+local data = player:WaitForChild("Data")
+local power = data.Power
 
 local autKey = false
 local autMediate
@@ -44,6 +47,50 @@ local Section = Tab:AddSection({
 	Name = "Stats"
 })
 
+local ShadowTrainFarm = false
+local ShadowTrainWait = 0
+if isPremium == false then
+
+local PLFarm = Tab:AddToggle({
+	Name = "Fast PL Farm (Requires Shadow)",
+	Default = false,
+	Callback = function(Value)
+	    local Pos1 = player.Character.HumanoidRootPart.Position.Y
+			if Pos1 >= 70000 then
+	        
+		ShadowTrainFarm = Value
+		
+		else
+		    
+	if Value == true then
+	   
+	OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "Teleport To Safe Place First",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+		 
+		 end   
+		end
+	end    
+})
+
+Tab:AddSlider({
+	Name = "Fast PL Settings",
+	Min = 0.2,
+	Max = 1,
+	Default = 0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 0.01,
+	ValueName = "Seconds Between Hits",
+	Callback = function(Value)
+		ShadowTrainWait = Value
+	end    
+})
+
+
+end
 
 Tab:AddToggle({
 	Name = "Auto Meditation (Put the manual one)",
@@ -58,29 +105,6 @@ Tab:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		autKey = Value
-	end    
-})
-
-local ShadowTrainFarm = false
-local ShadowTrainWait = 0
-Tab:AddToggle({
-	Name = "Fast PL Farm (Requires Shadow)",
-	Default = false,
-	Callback = function(Value)
-		ShadowTrainFarm = Value
-	end    
-})
-
-Tab:AddSlider({
-	Name = "Fast PL Settings",
-	Min = 0,
-	Max = 2,
-	Default = 0,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.01,
-	ValueName = "Seconds Between Hits",
-	Callback = function(Value)
-		ShadowTrainWait = Value
 	end    
 })
 
@@ -107,7 +131,6 @@ Tab:AddToggle({
 	end    
 })
 
-
 Tab:AddSlider({
 	Name = "Kill Aura Distance",
 	Min = 5,
@@ -118,27 +141,6 @@ Tab:AddSlider({
 	ValueName = "Meters",
 	Callback = function(Value)
 		maxDistance = Value
-	end    
-})
-
-local PlayersKillAura = false
-local firstTimeKillPlayers = false
-Tab:AddToggle({
-	Name = "Kill Aura Players",
-	Default = false,
-	Callback = function(Value)
-		PlayersKillAura = Value
-	if Value == true and firstTimeKillPlayers == false then
-	    firstTimeKillPlayers = true
-	OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "High ban risk if caught",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-
-})
-end
-		
 	end    
 })
 
@@ -321,6 +323,140 @@ game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
   	end    
 })
 
+local strengthSelected = nil
+local defenseSelected = nil
+local dropdown = nil
+local webhook = nil
+if isPremium == true then
+
+local Tab = Window:MakeTab({
+	Name = "Paid",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Tab:AddToggle({
+	Name = "Fast PL Farm (Requires Shadow)",
+	Default = false,
+	Callback = function(Value)
+		ShadowTrainFarm = Value
+	end    
+})
+
+Tab:AddSlider({
+	Name = "Fast PL Settings",
+	Min = 0,
+	Max = 2,
+	Default = 0,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 0.01,
+	ValueName = "Seconds Between Hits",
+	Callback = function(Value)
+		ShadowTrainWait = Value
+	end    
+})
+
+Tab:AddToggle({
+	Name = "Players Kill Aura",
+	Default = false,
+	Callback = function(Value)
+		PlayersKillAura = Value
+		
+		if firstTimeKillAura == false and Value == true then
+		firstTimeKillAura = true
+		OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "There is a little chance of you getting kicked",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+		
+		end
+	end    
+})
+
+
+Tab:AddDropdown({
+	Name = "Type",
+	Default = "",
+	Options = {"None", "Notify", "Webhook", "Kick"},
+	Callback = function(Value)
+		dropdown = Value
+	end    
+})
+
+Tab:AddTextbox({
+	Name = "Strength",
+	Default = power.Value + 10000,
+	TextDisappear = false,
+	Callback = function(Value)
+		strengthSelected = tonumber(Value)
+	end	  
+})
+
+Tab:AddTextbox({
+	Name = "Webhook (Only With Webhook Type)",
+	Default = "",
+	TextDisappear = false,
+	Callback = function(Value)
+		webhook = Value
+	end	  
+})
+
+power.Changed:Connect(function()
+   if power.Value >= strengthSelected then
+    
+    if dropdown == "Notify" then
+    
+    local audio = Instance.new("Sound", game.Workspace)
+    audio.SoundId = "rbxassetid://835068435"
+    audio.Volume = 10
+    audio:Play()
+    
+    OrionLib:MakeNotification({
+	Name = "Skrillex Hub",
+	Content = "You Reached " .. strengthSelected .. "+" .. " Strength",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+    
+    elseif dropdown == "Webhook" then
+        
+ local url =
+   webhook
+local data = {
+   ["content"] = "",
+   ["embeds"] = {
+       {
+           ["title"] = "Skrillex Hub Bot",
+           ["description"] = "You Reached " .. strengthSelected .. "+" .. " Strength",
+           ["type"] = "rich",
+           ["color"] = tonumber(0x7269da),
+           ["image"] = {
+               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+                   tostring(game:GetService("Players").LocalPlayer.Name)
+           }
+       }
+   }
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+local headers = {
+   ["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+
+elseif dropdown == "Kick" then
+    
+    player:Kick("You Reached " .. strengthSelected .. "+" .. " Strength")
+    
+    end
+    end
+end)
+
+end
 
 local Tab = Window:MakeTab({
 	Name = "Discord/Info",
@@ -445,7 +581,7 @@ while task.wait() do
 			local args = {
 				[1] = shadow,
 				[2] = {
-					["HitTime"] = 0.01,
+					["HitTime"] = 0.5,
 					["Type"] = "Normal",
 					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
 					["VictimCFrame"] = shadow.Torso.CFrame,
@@ -460,12 +596,13 @@ while task.wait() do
 
 		else
 
+            task.wait(1)
 			vim:SendKeyEvent(true, "U", false, game)
 
 		end
 	end
 
-	if KillAura == true then
+	if KillAura == true or PlayersKillAura == true then
 
 		for _, v in pairs(game.Workspace:GetChildren()) do
 
@@ -480,7 +617,7 @@ while task.wait() do
 						local args = {
 							[1] = v,
 							[2] = {
-								["HitTime"] = 0,
+								["HitTime"] = 0.01,
 								["Type"] = "Normal",
 								["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
 								["VictimCFrame"] = v.Torso.CFrame,
