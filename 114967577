@@ -596,8 +596,14 @@ while task.wait() do
 
 		else
 
-            task.wait(1)
-			vim:SendKeyEvent(true, "U", false, game)
+   if not game:GetService("Workspace"):FindFirstChild(player.Name .. "' Shadow") then
+       local args = {
+       [1] = "Summon"
+       }
+
+game:GetService("Players").LocalPlayer.PlayerGui._NCharge.Scripts.Summon:FireServer(unpack(args))
+
+end
 
 		end
 	end
