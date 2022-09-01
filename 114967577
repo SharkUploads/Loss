@@ -365,6 +365,7 @@ local dropdown = nil
 local dropdown2 = nil
 local webhook = nil
 local playerToKill = nil
+local autoDragonBalls = false
 if isPremium == true then
 
 	local Tab = Window:MakeTab({
@@ -413,6 +414,13 @@ if isPremium == true then
 		end    
 	})
 
+	Tab:AddToggle({
+		Name = "Auto Dragon Balls",
+		Default = false,
+		Callback = function(Value)
+			autoDragonBalls = Value
+		end    
+	})
 
 	Tab:AddDropdown({
 		Name = "Type",
@@ -517,7 +525,7 @@ if isPremium == true then
 			webhook = Value
 		end	  
 	})
-	
+
 	local killPlayerV = false
 	local firstTimeKillPlayer = false
 	local killPlayer = Tab:AddToggle({
@@ -528,14 +536,14 @@ if isPremium == true then
 
 			if firstTimeKillPlayer == false and Value == true then
 				firstTimeKillPlayer = true
-				
+
 				OrionLib:MakeNotification({
 					Name = "Skrillex Hub",
 					Content = "High ban chance",
 					Image = "rbxassetid://4483345998",
 					Time = 5
 				})
-			
+
 			end
 		end    
 	})
@@ -548,30 +556,30 @@ if isPremium == true then
 			playerToKill = Value
 		end   
 	})
-	
+
 	local playerstable = {}
 	for _, v in pairs(game.Players:GetChildren()) do
-		
+
 		table.insert(playerstable, v.Name)
-		
+
 	end
-	
+
 	dd:Refresh(playerstable)
-	
+
 	players.PlayerAdded:Connect(function(plr)
-		
+
 		for k in pairs(playerstable) do
 			k [k] = nil
 		end
-		
+
 		for _, v in pairs(game.Players:GetChildren()) do
 
 			table.insert(playerstable, v.Name)
 
 		end
-		
+
 		dd:Refresh(playerstable)		
-		
+
 		if checkAdmin(plr) == true then
 
 			if dropdown2 == "Webhook" then
@@ -609,7 +617,7 @@ if isPremium == true then
 			end
 		end
 	end)
-	
+
 	for _, v in pairs(players:GetChildren()) do
 
 		if checkAdmin(v) == true and isPremium == true then
@@ -649,54 +657,54 @@ if isPremium == true then
 			end
 		end
 	end
-	
+
 	local oldCFrame = nil
 	coroutine.wrap(function()
-	while task.wait() do
-		
-		if game.Players:FindFirstChild(playerToKill) and killPlayerV == true then
-				
+		while task.wait() do
+
+			if game.Players:FindFirstChild(playerToKill) and killPlayerV == true then
+
 
 				local plr = game.Players:FindFirstChild(playerToKill)
-				
+
 				if plr.Character.Humanoid.Health >= 1 then
-				
-			player.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
-			
-			if oldCFrame == nil then
-				
-				oldCFrame = player.Character.HumanoidRootPart.CFrame
-				
-			end
 
-			local args = {
-				[1] = plr.Character,
-				[2] = {
-					["HitTime"] = 0,
-					["Type"] = "Normal",
-					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-					["VictimCFrame"] = plr.Character.Torso.CFrame,
-					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-					["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-					["Damage"] = math.huge
-				}
-			}
+					player.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
 
-			game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
-			if plr.Character.Humanoid.Health <= 0 then
-					
-				killPlayer:Set(false)
-				task.wait(1)
-				player.Character.HumanoidRootPart.CFrame = oldCFrame
-				oldCFrame = nil
-						
+					if oldCFrame == nil then
+
+						oldCFrame = player.Character.HumanoidRootPart.CFrame
+
+					end
+
+					local args = {
+						[1] = plr.Character,
+						[2] = {
+							["HitTime"] = 0,
+							["Type"] = "Normal",
+							["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+							["VictimCFrame"] = plr.Character.Torso.CFrame,
+							["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+							["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+							["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+							["Damage"] = math.huge
+						}
+					}
+
+					game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+					if plr.Character.Humanoid.Health <= 0 then
+
+						killPlayer:Set(false)
+						task.wait(1)
+						player.Character.HumanoidRootPart.CFrame = oldCFrame
+						oldCFrame = nil
+
+					end
 				end
 			end
+
 		end
-		
-	end
-   end)()	
+	end)()	
 end
 
 
@@ -855,11 +863,11 @@ while task.wait() do
 	end
 
 	if KillAura == true or PlayersKillAura == true then
-		
+
 		for _, v in pairs(game.Workspace:GetChildren()) do
 
 			if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
-					if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
+				if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
 					if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
 						local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
 						print(distance)
@@ -884,7 +892,7 @@ while task.wait() do
 					end       
 				end
 			end
-			end
+		end
 	end
 
 	if InfStam == true then
@@ -903,6 +911,23 @@ while task.wait() do
 
 		player.Data.CombatSpeed.Value = PunchingSpeed
 
+	end
+
+	if autoDragonBalls == true then
+		if game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa") then
+			for _, v in pairs(game:GetService("Workspace").DragonBallLocatioionsa:GetChildren()) do
+				if string.match(v.Name, " Star Ball") then
+					for _, v in pairs(v:GetDescendants()) do
+						if v:IsA("MeshPart") then
+							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+						end   
+							if v:IsA("ProximityPrompt") then
+								fireproximityprompt(v)
+							end   
+					end 
+				end
+			end
+		end
 	end
 
 end
