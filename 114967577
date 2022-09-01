@@ -5,6 +5,13 @@ local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shl
 local Window = nil
 local player = game.Players.LocalPlayer
 local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449}
+local synapse = false
+
+if syn then
+	
+	synapse = true
+	
+end
 
 function checkAdmin(plr)
 
@@ -921,9 +928,11 @@ while task.wait() do
 						if v:IsA("MeshPart") then
 							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
 						end   
+						if synapse == true then
 							if v:IsA("ProximityPrompt") then
 								fireproximityprompt(v)
-							end   
+							end 
+						end
 					end 
 				end
 			end
