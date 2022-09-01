@@ -3,12 +3,12 @@ local theKey = require(10759199334)
 local isPremium = false
 local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 local Window = nil
-local players = game.Players
-local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449, 1961086738}
+local player = game.Players.LocalPlayer
+local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449}
 
 function checkAdmin(plr)
    
-   if table.find(adminIds, plr.UserId) or plr:GetRankInGroup(2724482) >= 3 then
+   if table.find(adminIds, plr.UserId) then
        
        return true
        
@@ -24,21 +24,6 @@ if theKey.CheckPaid(game.Players.LocalPlayer) == true then
   
   Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
   isPremium = true
-  local players = game.Players
-
-local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449, 1961086738}
-
-for _, v in pairs(game.Players:GetChildren()) do
-if checkAdmin(v) == true then
-player:Kick()
-end
-end
-
-players.PlayerAdded:Connect(function(plr)
-if checkAdmin(plr) == true then
-player:Kick()
-end
-end)
  
  else
      
@@ -46,6 +31,9 @@ end)
 
  
 end
+
+local players = game.Players
+
 
 if syn then
 local mt = getrawmetatable(game)
@@ -374,6 +362,7 @@ game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
 local strengthSelected = nil
 local defenseSelected = nil
 local dropdown = nil
+local dropdown2 = nil
 local webhook = nil
 if isPremium == true then
 
@@ -504,6 +493,109 @@ elseif dropdown == "Kick" then
     end
 end)
 
+local Tab = Window:MakeTab({
+	Name = "Paid 2",
+	Icon = "rbxassetid://4483345998",
+	PremiumOnly = false
+})
+
+Tab:AddDropdown({
+	Name = "Admin Detect",
+	Default = "Kick",
+	Options = {"None", "Kick", "Notify", "Webhook"},
+	Callback = function(Value)
+		dropdown2 = Value
+	end    
+})
+
+Tab:AddTextbox({
+	Name = "Webhook (Only With Webhook Type)",
+	Default = "",
+	TextDisappear = false,
+	Callback = function(Value)
+		webhook = Value
+	end	  
+})
+
+players.PlayerAdded:Connect(function(plr)
+    
+    if checkAdmin(plr) == true then
+   
+    if dropdown2 == "Webhook" then
+        
+ local url =
+   webhook
+local data = {
+   ["content"] = "",
+   ["embeds"] = {
+       {
+           ["title"] = "Skrillex Hub Bot",
+           ["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
+           ["type"] = "rich",
+           ["color"] = tonumber(0x7269da),
+           ["image"] = {
+               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+                   tostring(game:GetService("Players").LocalPlayer.Name)
+           }
+       }
+   }
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+local headers = {
+   ["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+
+elseif dropdown2 == "Kick" then
+    
+    player:Kick("Admin Detected")
+    
+    end
+    end
+end)
+end
+
+for _, v in pairs(players:GetChildren()) do
+
+if checkAdmin(v) == true and isPremium == true then
+
+    if dropdown2 == "Webhook" then
+        
+ local url =
+   webhook
+local data = {
+   ["content"] = "",
+   ["embeds"] = {
+       {
+           ["title"] = "Skrillex Hub Bot",
+           ["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
+           ["type"] = "rich",
+           ["color"] = tonumber(0x7269da),
+           ["image"] = {
+               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+                   tostring(game:GetService("Players").LocalPlayer.Name)
+           }
+       }
+   }
+}
+local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+local headers = {
+   ["content-type"] = "application/json"
+}
+request = http_request or request or HttpPost or syn.request
+local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+request(abcdef)
+
+elseif dropdown2 == "Kick" then
+    
+    player:Kick("Admin Detected")
+    
+    end
+end
 end
 
 local Tab = Window:MakeTab({
