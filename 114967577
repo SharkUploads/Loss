@@ -7,49 +7,49 @@ local player = game.Players.LocalPlayer
 local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449}
 
 function checkAdmin(plr)
-   
-   if table.find(adminIds, plr.UserId) then
-       
-       return true
-       
-       else
-           
-       return false
-       
-   end
+
+	if table.find(adminIds, plr.UserId) then
+
+		return true
+
+	else
+
+		return false
+
+	end
 
 end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
-  
-  Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
-  isPremium = true
- 
- else
-     
- Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
 
- 
+	Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+	isPremium = true
+
+else
+
+	Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+
+
 end
 
 local players = game.Players
 
 
 if syn then
-local mt = getrawmetatable(game)
-make_writeable(mt)
+	local mt = getrawmetatable(game)
+	make_writeable(mt)
 
-local namecall = mt.__namecall
+	local namecall = mt.__namecall
 
-mt.__namecall = newcclosure(function(self, ...)
-    local method = getnamecallmethod()
-    local args = {...}
+	mt.__namecall = newcclosure(function(self, ...)
+		local method = getnamecallmethod()
+		local args = {...}
 
-    if method == "FireServer" and tostring(self) == "BanRemote" then
-       return
-    end
-    return namecall(self, table.unpack(args))
-end)
+		if method == "FireServer" and tostring(self) == "BanRemote" then
+			return
+		end
+		return namecall(self, table.unpack(args))
+	end)
 end
 
 local vim = game:GetService("VirtualInputManager")
@@ -87,43 +87,43 @@ local ShadowTrainFarm = false
 local ShadowTrainWait = 0
 if isPremium == false then
 
-local PLFarm = Tab:AddToggle({
-	Name = "Fast PL Farm",
-	Default = false,
-	Callback = function(Value)
-	    local Pos1 = player.Character.HumanoidRootPart.Position.Y
+	local PLFarm = Tab:AddToggle({
+		Name = "Fast PL Farm",
+		Default = false,
+		Callback = function(Value)
+			local Pos1 = player.Character.HumanoidRootPart.Position.Y
 			if Pos1 >= 70000 then
-	        
-		ShadowTrainFarm = Value
-		
-		else
-		    
-	if Value == true then
-	   
-	OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "Teleport To Safe Place First",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-		 
-		 end   
-		end
-	end    
-})
 
-Tab:AddSlider({
-	Name = "Fast PL Settings",
-	Min = 0.2,
-	Max = 1,
-	Default = 0,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.01,
-	ValueName = "Seconds Between Hits",
-	Callback = function(Value)
-		ShadowTrainWait = Value
-	end    
-})
+				ShadowTrainFarm = Value
+
+			else
+
+				if Value == true then
+
+					OrionLib:MakeNotification({
+						Name = "Skrillex Hub",
+						Content = "Teleport To Safe Place First",
+						Image = "rbxassetid://4483345998",
+						Time = 5
+					})
+
+				end   
+			end
+		end    
+	})
+
+	Tab:AddSlider({
+		Name = "Fast PL Settings",
+		Min = 0.2,
+		Max = 1,
+		Default = 0,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 0.01,
+		ValueName = "Seconds Between Hits",
+		Callback = function(Value)
+			ShadowTrainWait = Value
+		end    
+	})
 
 
 end
@@ -153,16 +153,16 @@ Tab:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		KillAura = Value
-		
+
 		if firstTimeKillAura == false and Value == true then
-		firstTimeKillAura = true
-		OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "There is a little chance of you getting kicked",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-		
+			firstTimeKillAura = true
+			OrionLib:MakeNotification({
+				Name = "Skrillex Hub",
+				Content = "There is a little chance of you getting kicked",
+				Image = "rbxassetid://4483345998",
+				Time = 5
+			})
+
 		end
 	end    
 })
@@ -259,11 +259,11 @@ Tab:AddToggle({
 	Default = false,
 	Callback = function(Value)
 		PunchingSpeed = Value
-		
+
 		if Value == false then
-		   
-		   player.Data.CombatSpeed.Value = 0
-		    
+
+			player.Data.CombatSpeed.Value = 0
+
 		end
 	end    
 })
@@ -286,18 +286,18 @@ local EspClicked = false
 Tab:AddButton({
 	Name = "Esp (Fates Esp)",
 	Callback = function()
-	if EspActivated == false then
-	    EspActivated = true
-	OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "Fates Esp Open",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-end    
-      		loadstring(game:HttpGet('https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua'))()
+		if EspActivated == false then
+			EspActivated = true
+			OrionLib:MakeNotification({
+				Name = "Skrillex Hub",
+				Content = "Fates Esp Open",
+				Image = "rbxassetid://4483345998",
+				Time = 5
+			})
+		end    
+		loadstring(game:HttpGet('https://raw.githubusercontent.com/fatesc/fates-esp/main/main.lua'))()
 
-  	end    
+	end    
 })
 
 local Tab = Window:MakeTab({
@@ -334,29 +334,29 @@ local Tab = Window:MakeTab({
 Tab:AddButton({
 	Name = "Earth",
 	Callback = function()
-game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
-  	end    
+		game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
+	end    
 })
 
 Tab:AddButton({
 	Name = "Otherworld",
 	Callback = function()
-game:GetService("TeleportService"):Teleport(4263492467, LocalPlayer)
-  	end    
+		game:GetService("TeleportService"):Teleport(4263492467, LocalPlayer)
+	end    
 })
 
 Tab:AddButton({
 	Name = "Namek (3000+ Strength)",
 	Callback = function()
-game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
-  	end    
+		game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
+	end    
 })
 
 Tab:AddButton({
 	Name = "Gravity Chamber (2500+ Strength)",
 	Callback = function()
-game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
-  	end    
+		game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
+	end    
 })
 
 local strengthSelected = nil
@@ -364,239 +364,328 @@ local defenseSelected = nil
 local dropdown = nil
 local dropdown2 = nil
 local webhook = nil
+local playerToKill = nil
 if isPremium == true then
 
-local Tab = Window:MakeTab({
-	Name = "Paid",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
+	local Tab = Window:MakeTab({
+		Name = "Paid",
+		Icon = "rbxassetid://4483345998",
+		PremiumOnly = false
+	})
 
-Tab:AddToggle({
-	Name = "Fast PL Farm",
-	Default = false,
-	Callback = function(Value)
-		ShadowTrainFarm = Value
-	end    
-})
+	Tab:AddToggle({
+		Name = "Fast PL Farm",
+		Default = false,
+		Callback = function(Value)
+			ShadowTrainFarm = Value
+		end    
+	})
 
-Tab:AddSlider({
-	Name = "Fast PL Settings",
-	Min = 0,
-	Max = 2,
-	Default = 0,
-	Color = Color3.fromRGB(255,255,255),
-	Increment = 0.01,
-	ValueName = "Seconds Between Hits",
-	Callback = function(Value)
-		ShadowTrainWait = Value
-	end    
-})
+	Tab:AddSlider({
+		Name = "Fast PL Settings",
+		Min = 0,
+		Max = 2,
+		Default = 0,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 0.01,
+		ValueName = "Seconds Between Hits",
+		Callback = function(Value)
+			ShadowTrainWait = Value
+		end    
+	})
 
-Tab:AddToggle({
-	Name = "Players Kill Aura",
-	Default = false,
-	Callback = function(Value)
-		PlayersKillAura = Value
-		
-		if firstTimeKillAura == false and Value == true then
-		firstTimeKillAura = true
-		OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "There is a little chance of you getting kicked",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-		
+	Tab:AddToggle({
+		Name = "Players Kill Aura",
+		Default = false,
+		Callback = function(Value)
+			PlayersKillAura = Value
+
+			if firstTimeKillAura == false and Value == true then
+				firstTimeKillAura = true
+				OrionLib:MakeNotification({
+					Name = "Skrillex Hub",
+					Content = "There is a little chance of you getting kicked",
+					Image = "rbxassetid://4483345998",
+					Time = 5
+				})
+
+			end
+		end    
+	})
+
+
+	Tab:AddDropdown({
+		Name = "Type",
+		Default = "",
+		Options = {"None", "Notify", "Webhook", "Kick"},
+		Callback = function(Value)
+			dropdown = Value
+		end    
+	})
+
+	Tab:AddTextbox({
+		Name = "Strength",
+		Default = power.Value + 10000,
+		TextDisappear = false,
+		Callback = function(Value)
+			strengthSelected = tonumber(Value)
+		end	  
+	})
+
+	Tab:AddTextbox({
+		Name = "Webhook (Only With Webhook Type)",
+		Default = "",
+		TextDisappear = false,
+		Callback = function(Value)
+			webhook = Value
+		end	  
+	})
+
+	power.Changed:Connect(function()
+		if power.Value >= strengthSelected then
+
+			if dropdown == "Notify" then
+
+				local audio = Instance.new("Sound", game.Workspace)
+				audio.SoundId = "rbxassetid://835068435"
+				audio.Volume = 10
+				audio:Play()
+
+				OrionLib:MakeNotification({
+					Name = "Skrillex Hub",
+					Content = "You Reached " .. strengthSelected .. "+" .. " Strength",
+					Image = "rbxassetid://4483345998",
+					Time = 5
+				})
+
+			elseif dropdown == "Webhook" then
+
+				local url =
+					webhook
+				local data = {
+					["content"] = "",
+					["embeds"] = {
+						{
+							["title"] = "Skrillex Hub Bot",
+							["description"] = "You Reached " .. strengthSelected .. "+" .. " Strength",
+							["type"] = "rich",
+							["color"] = tonumber(0x7269da),
+							["image"] = {
+								["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+									tostring(game:GetService("Players").LocalPlayer.Name)
+							}
+						}
+					}
+				}
+				local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+				local headers = {
+					["content-type"] = "application/json"
+				}
+				request = http_request or request or HttpPost or syn.request
+				local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+				request(abcdef)
+
+			elseif dropdown == "Kick" then
+
+				player:Kick("You Reached " .. strengthSelected .. "+" .. " Strength")
+
+			end
 		end
-	end    
-})
+	end)
 
+	local Tab = Window:MakeTab({
+		Name = "Paid 2",
+		Icon = "rbxassetid://4483345998",
+		PremiumOnly = false
+	})
 
-Tab:AddDropdown({
-	Name = "Type",
-	Default = "",
-	Options = {"None", "Notify", "Webhook", "Kick"},
-	Callback = function(Value)
-		dropdown = Value
-	end    
-})
+	Tab:AddDropdown({
+		Name = "Admin Detect",
+		Default = "Kick",
+		Options = {"None", "Kick", "Notify", "Webhook"},
+		Callback = function(Value)
+			dropdown2 = Value
+		end    
+	})
 
-Tab:AddTextbox({
-	Name = "Strength",
-	Default = power.Value + 10000,
-	TextDisappear = false,
-	Callback = function(Value)
-		strengthSelected = tonumber(Value)
-	end	  
-})
+	Tab:AddTextbox({
+		Name = "Webhook (Only With Webhook Type)",
+		Default = "",
+		TextDisappear = false,
+		Callback = function(Value)
+			webhook = Value
+		end	  
+	})
+	
+	local killPlayerV = false
+	local firstTimeKillPlayer = false
+	local killPlayer = Tab:AddToggle({
+		Name = "Kill Player",
+		Default = false,
+		Callback = function(Value)
+			killPlayerV = Value
 
-Tab:AddTextbox({
-	Name = "Webhook (Only With Webhook Type)",
-	Default = "",
-	TextDisappear = false,
-	Callback = function(Value)
-		webhook = Value
-	end	  
-})
+			if firstTimeKillPlayer == false and Value == true then
+				firstTimeKillPlayer = true
+				
+				OrionLib:MakeNotification({
+					Name = "Skrillex Hub",
+					Content = "High ban chance",
+					Image = "rbxassetid://4483345998",
+					Time = 5
+				})
+			
+			end
+		end    
+	})
 
-power.Changed:Connect(function()
-   if power.Value >= strengthSelected then
-    
-    if dropdown == "Notify" then
-    
-    local audio = Instance.new("Sound", game.Workspace)
-    audio.SoundId = "rbxassetid://835068435"
-    audio.Volume = 10
-    audio:Play()
-    
-    OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "You Reached " .. strengthSelected .. "+" .. " Strength",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})
-    
-    elseif dropdown == "Webhook" then
-        
- local url =
-   webhook
-local data = {
-   ["content"] = "",
-   ["embeds"] = {
-       {
-           ["title"] = "Skrillex Hub Bot",
-           ["description"] = "You Reached " .. strengthSelected .. "+" .. " Strength",
-           ["type"] = "rich",
-           ["color"] = tonumber(0x7269da),
-           ["image"] = {
-               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-                   tostring(game:GetService("Players").LocalPlayer.Name)
-           }
-       }
-   }
-}
-local newdata = game:GetService("HttpService"):JSONEncode(data)
+	local dd= Tab:AddDropdown({
+		Name = "Players",
+		Default = "None",
+		Options = {"None"},
+		Callback = function(Value)
+			playerToKill = Value
+		end   
+	})
+	
+	local playerstable = {}
+	for _, v in pairs(game.Players:GetChildren()) do
+		
+		table.insert(playerstable, v.Name)
+		
+	end
+	
+	dd:Refresh(playerstable)
+	players.PlayerAdded:Connect(function(plr)
 
-local headers = {
-   ["content-type"] = "application/json"
-}
-request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-request(abcdef)
+		if checkAdmin(plr) == true then
 
-elseif dropdown == "Kick" then
-    
-    player:Kick("You Reached " .. strengthSelected .. "+" .. " Strength")
-    
-    end
-    end
-end)
+			if dropdown2 == "Webhook" then
 
-local Tab = Window:MakeTab({
-	Name = "Paid 2",
-	Icon = "rbxassetid://4483345998",
-	PremiumOnly = false
-})
+				local url =
+					webhook
+				local data = {
+					["content"] = "",
+					["embeds"] = {
+						{
+							["title"] = "Skrillex Hub Bot",
+							["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
+							["type"] = "rich",
+							["color"] = tonumber(0x7269da),
+							["image"] = {
+								["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+									tostring(game:GetService("Players").LocalPlayer.Name)
+							}
+						}
+					}
+				}
+				local newdata = game:GetService("HttpService"):JSONEncode(data)
 
-Tab:AddDropdown({
-	Name = "Admin Detect",
-	Default = "Kick",
-	Options = {"None", "Kick", "Notify", "Webhook"},
-	Callback = function(Value)
-		dropdown2 = Value
-	end    
-})
+				local headers = {
+					["content-type"] = "application/json"
+				}
+				request = http_request or request or HttpPost or syn.request
+				local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+				request(abcdef)
 
-Tab:AddTextbox({
-	Name = "Webhook (Only With Webhook Type)",
-	Default = "",
-	TextDisappear = false,
-	Callback = function(Value)
-		webhook = Value
-	end	  
-})
+			elseif dropdown2 == "Kick" then
 
-players.PlayerAdded:Connect(function(plr)
-    
-    if checkAdmin(plr) == true then
-   
-    if dropdown2 == "Webhook" then
-        
- local url =
-   webhook
-local data = {
-   ["content"] = "",
-   ["embeds"] = {
-       {
-           ["title"] = "Skrillex Hub Bot",
-           ["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
-           ["type"] = "rich",
-           ["color"] = tonumber(0x7269da),
-           ["image"] = {
-               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-                   tostring(game:GetService("Players").LocalPlayer.Name)
-           }
-       }
-   }
-}
-local newdata = game:GetService("HttpService"):JSONEncode(data)
+				player:Kick("Admin Detected")
 
-local headers = {
-   ["content-type"] = "application/json"
-}
-request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-request(abcdef)
+			end
+		end
+	end)
+	
+	for _, v in pairs(players:GetChildren()) do
 
-elseif dropdown2 == "Kick" then
-    
-    player:Kick("Admin Detected")
-    
-    end
-    end
-end)
+		if checkAdmin(v) == true and isPremium == true then
+
+			if dropdown2 == "Webhook" then
+
+				local url =
+					webhook
+				local data = {
+					["content"] = "",
+					["embeds"] = {
+						{
+							["title"] = "Skrillex Hub Bot",
+							["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
+							["type"] = "rich",
+							["color"] = tonumber(0x7269da),
+							["image"] = {
+								["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+									tostring(game:GetService("Players").LocalPlayer.Name)
+							}
+						}
+					}
+				}
+				local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+				local headers = {
+					["content-type"] = "application/json"
+				}
+				request = http_request or request or HttpPost or syn.request
+				local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+				request(abcdef)
+
+			elseif dropdown2 == "Kick" then
+
+				player:Kick("Admin Detected")
+
+			end
+		end
+	end
+	
+	local oldCFrame = nil
+	coroutine.wrap(function()
+	while task.wait() do
+		
+		if game.Players:FindFirstChild(playerToKill) and killPlayerV == true then
+				
+
+				local plr = game.Players:FindFirstChild(playerToKill)
+				
+				if plr.Character.Humanoid.Health >= 1 then
+				
+			player.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
+			
+			if oldCFrame == nil then
+				
+				oldCFrame = player.Character.HumanoidRootPart.CFrame
+				
+			end
+
+			local args = {
+				[1] = plr.Character,
+				[2] = {
+					["HitTime"] = 0,
+					["Type"] = "Normal",
+					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+					["VictimCFrame"] = plr.Character.Torso.CFrame,
+					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+					["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+					["Damage"] = math.huge
+				}
+			}
+
+			game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+			if plr.Character.Humanoid.Health <= 0 then
+					
+				killPlayer:Set(false)
+				task.wait(1)
+				player.Character.HumanoidRootPart.CFrame = oldCFrame
+				oldCFrame = nil
+						
+				end
+			end
+		end
+		
+	end
+   end)()	
 end
 
-for _, v in pairs(players:GetChildren()) do
-
-if checkAdmin(v) == true and isPremium == true then
-
-    if dropdown2 == "Webhook" then
-        
- local url =
-   webhook
-local data = {
-   ["content"] = "",
-   ["embeds"] = {
-       {
-           ["title"] = "Skrillex Hub Bot",
-           ["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
-           ["type"] = "rich",
-           ["color"] = tonumber(0x7269da),
-           ["image"] = {
-               ["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-                   tostring(game:GetService("Players").LocalPlayer.Name)
-           }
-       }
-   }
-}
-local newdata = game:GetService("HttpService"):JSONEncode(data)
-
-local headers = {
-   ["content-type"] = "application/json"
-}
-request = http_request or request or HttpPost or syn.request
-local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-request(abcdef)
-
-elseif dropdown2 == "Kick" then
-    
-    player:Kick("Admin Detected")
-    
-    end
-end
-end
 
 local Tab = Window:MakeTab({
 	Name = "Discord/Info",
@@ -607,41 +696,41 @@ local Tab = Window:MakeTab({
 Tab:AddButton({
 	Name = "Join Discord",
 	Callback = function()
-	    
-	if syn then
-	
-	syn.request(
-   {
-       Url = "http://127.0.0.1:6463/rpc?v=1",
-       Method = "POST",
-       Headers = {
-           ["Content-Type"] = "application/json",
-           ["origin"] = "https://discord.com",
-       },
-       Body = game:GetService("HttpService"):JSONEncode(
-           {
-               ["args"] = {
-                   ["code"] = "KvM87FJHEj",
-               },
-               ["cmd"] = "INVITE_BROWSER",
-               ["nonce"] = "."
-           })
-   })
-	
-	else
-	    
-	  setclipboard(tostring("https://discord.gg/KvM87FJHEj"))  
-	    
-	  	OrionLib:MakeNotification({
-	Name = "Skrillex Hub",
-	Content = "Copied Link!",
-	Image = "rbxassetid://4483345998",
-	Time = 5
-})  
-	    
-	end
 
-end    
+		if syn then
+
+			syn.request(
+				{
+					Url = "http://127.0.0.1:6463/rpc?v=1",
+					Method = "POST",
+					Headers = {
+						["Content-Type"] = "application/json",
+						["origin"] = "https://discord.com",
+					},
+					Body = game:GetService("HttpService"):JSONEncode(
+					{
+						["args"] = {
+							["code"] = "KvM87FJHEj",
+						},
+						["cmd"] = "INVITE_BROWSER",
+						["nonce"] = "."
+					})
+				})
+
+		else
+
+			setclipboard(tostring("https://discord.gg/KvM87FJHEj"))  
+
+			OrionLib:MakeNotification({
+				Name = "Skrillex Hub",
+				Content = "Copied Link!",
+				Image = "rbxassetid://4483345998",
+				Time = 5
+			})  
+
+		end
+
+	end    
 })
 
 Tab:AddParagraph("Info","Made by Skrillex#6300")
@@ -650,55 +739,55 @@ OrionLib:Init()
 
 local vu = game:GetService("VirtualUser")
 game:GetService("Players").LocalPlayer.Idled:connect(function()
-   vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
-   wait(1)
-   vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	vu:Button2Down(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
+	wait(1)
+	vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 end)
 
 local target = nil
 coroutine.wrap(function()
-   
-   while task.wait(ShadowTrainWait) do
-   
-   	if ShadowTrainFarm == true then
 
-		if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
+	while task.wait(ShadowTrainWait) do
 
-			local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
+		if ShadowTrainFarm == true then
 
-			player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
+			if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
 
-			local args = {
-				[1] = shadow,
-				[2] = {
-					["HitTime"] = 0,
-					["Type"] = "Normal",
-					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-					["VictimCFrame"] = shadow.Torso.CFrame,
-					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-					["Velocity"] = Vector3.new(5, 5, 5) --[[Vector3]],
-					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-					["Damage"] = 1
+				local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
+
+				player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
+
+				local args = {
+					[1] = shadow,
+					[2] = {
+						["HitTime"] = 0,
+						["Type"] = "Normal",
+						["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+						["VictimCFrame"] = shadow.Torso.CFrame,
+						["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+						["Velocity"] = Vector3.new(5, 5, 5) --[[Vector3]],
+						["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+						["Damage"] = 1
+					}
 				}
-			}
 
-			game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+				game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
 
-		else
+			else
 
-   if not game:GetService("Workspace"):FindFirstChild(player.Name .. "' Shadow") then
-       local args = {
-       [1] = "Summon"
-       }
+				if not game:GetService("Workspace"):FindFirstChild(player.Name .. "' Shadow") then
+					local args = {
+						[1] = "Summon"
+					}
 
-game:GetService("Players").LocalPlayer.PlayerGui._NCharge.Scripts.Summon:FireServer(unpack(args))
+					game:GetService("Players").LocalPlayer.PlayerGui._NCharge.Scripts.Summon:FireServer(unpack(args))
 
-end
+				end
 
+			end
 		end
-	end
- 
-   end 
+
+	end 
 end)()
 
 while task.wait() do
@@ -734,7 +823,7 @@ while task.wait() do
 		vim:SendKeyEvent(true, evennewStr2, false, game)
 		task.wait(0.1)
 
-      end
+	end
 
 	if autMediate == true then
 
@@ -751,58 +840,56 @@ while task.wait() do
 			end     
 		end
 	end
-	
-	if KillAura == true or PlayersKillAura == true then
 
+	if KillAura == true or PlayersKillAura == true then
+		
 		for _, v in pairs(game.Workspace:GetChildren()) do
 
 			if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
-
-				if v.Name ~= player.Name then
-					
-					if game.Players:FindFirstChild(v.Name) and PlayersKillAura == true or not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false then					
-					local distance = player:DistanceFromCharacter(v.HumanoidRootPart.Position)
-					if distance <= maxDistance then
-
-						local args = {
-							[1] = v,
-							[2] = {
-								["HitTime"] = 0,
-								["Type"] = "Normal",
-								["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-								["VictimCFrame"] = v.Torso.CFrame,
-								["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-								["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-								["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-								["Damage"] = 1000
+					if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
+					if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
+						local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
+						print(distance)
+						if distance <= maxDistance then
+							local args = {
+								[1] = v,
+								[2] = {
+									["HitTime"] = 0,
+									["Type"] = "Normal",
+									["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+									["VictimCFrame"] = v.HumanoidRootPart.CFrame,
+									["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+									["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+									["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+									["Damage"] = 0
+								}
 							}
-						}
 
-						game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
-							
+							game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+
 						end
 					end       
 				end
 			end
-		end
+			end
 	end
-	
+
 	if InfStam == true then
-		
+
 		player.Data.Stamina.Value = player.Data.MaxStamina.Value
-		
+
 	end
-	
+
 	if InfKi == true then
-		
+
 		player.Data.Ki.Value = player.Data.MaxKi.Value
-		
+
 	end
-	
+
 	if FastPunch == true then
-	   
-	   player.Data.CombatSpeed.Value = PunchingSpeed
-	    
+
+		player.Data.CombatSpeed.Value = PunchingSpeed
+
 	end
-	
+
 end
