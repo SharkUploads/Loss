@@ -52,7 +52,7 @@ local ShadowTrainWait = 0
 if isPremium == false then
 
 local PLFarm = Tab:AddToggle({
-	Name = "Fast PL Farm (Requires Shadow)",
+	Name = "Fast PL Farm",
 	Default = false,
 	Callback = function(Value)
 	    local Pos1 = player.Character.HumanoidRootPart.Position.Y
@@ -336,7 +336,7 @@ local Tab = Window:MakeTab({
 })
 
 Tab:AddToggle({
-	Name = "Fast PL Farm (Requires Shadow)",
+	Name = "Fast PL Farm",
 	Default = false,
 	Callback = function(Value)
 		ShadowTrainFarm = Value
@@ -581,7 +581,7 @@ while task.wait() do
 			local args = {
 				[1] = shadow,
 				[2] = {
-					["HitTime"] = 0.5,
+					["HitTime"] = 60,
 					["Type"] = "Normal",
 					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
 					["VictimCFrame"] = shadow.Torso.CFrame,
