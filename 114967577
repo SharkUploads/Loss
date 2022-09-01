@@ -515,8 +515,52 @@ game:GetService("Players").LocalPlayer.Idled:connect(function()
    vu:Button2Up(Vector2.new(0,0),workspace.CurrentCamera.CFrame)
 end)
 
-
 local target = nil
+coroutine.wrap(function()
+   
+   while task.wait(ShadowTrainWait) do
+   
+   	if ShadowTrainFarm == true then
+
+		if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
+
+			local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
+
+			player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
+
+			local args = {
+				[1] = shadow,
+				[2] = {
+					["HitTime"] = 60,
+					["Type"] = "Normal",
+					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+					["VictimCFrame"] = shadow.Torso.CFrame,
+					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+					["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+					["Damage"] = 0
+				}
+			}
+
+			game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+
+		else
+
+   if not game:GetService("Workspace"):FindFirstChild(player.Name .. "' Shadow") then
+       local args = {
+       [1] = "Summon"
+       }
+
+game:GetService("Players").LocalPlayer.PlayerGui._NCharge.Scripts.Summon:FireServer(unpack(args))
+
+end
+
+		end
+	end
+ 
+   end 
+end)()
+
 while task.wait() do
 	if autKey == true then
 		local str1 = nil
@@ -567,47 +611,7 @@ while task.wait() do
 			end     
 		end
 	end
-
-	if ShadowTrainFarm == true then
-
-		if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
-
-			local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
-
-			player.Character.HumanoidRootPart.CFrame = shadow.Torso.CFrame	
-
-            task.wait(ShadowTrainWait)
-
-			local args = {
-				[1] = shadow,
-				[2] = {
-					["HitTime"] = 60,
-					["Type"] = "Normal",
-					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-					["VictimCFrame"] = shadow.Torso.CFrame,
-					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-					["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-					["Damage"] = 0
-				}
-			}
-
-			game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
-
-		else
-
-   if not game:GetService("Workspace"):FindFirstChild(player.Name .. "' Shadow") then
-       local args = {
-       [1] = "Summon"
-       }
-
-game:GetService("Players").LocalPlayer.PlayerGui._NCharge.Scripts.Summon:FireServer(unpack(args))
-
-end
-
-		end
-	end
-
+	
 	if KillAura == true or PlayersKillAura == true then
 
 		for _, v in pairs(game.Workspace:GetChildren()) do
