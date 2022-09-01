@@ -16,6 +16,21 @@ if theKey.CheckPaid(game.Players.LocalPlayer) == true then
  
 end
 
+local mt = getrawmetatable(game)
+make_writeable(mt)
+
+local namecall = mt.__namecall
+
+mt.__namecall = newcclosure(function(self, ...)
+    local method = getnamecallmethod()
+    local args = {...}
+
+    if method == "FireServer" and tostring(self) == "BanRemote" then
+       return
+    end
+    return namecall(self, table.unpack(args))
+end)
+
 local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
 local hum = player.Character:WaitForChild("Humanoid")
@@ -531,14 +546,14 @@ coroutine.wrap(function()
 			local args = {
 				[1] = shadow,
 				[2] = {
-					["HitTime"] = 60,
+					["HitTime"] = 0,
 					["Type"] = "Normal",
 					["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
 					["VictimCFrame"] = shadow.Torso.CFrame,
 					["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-					["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+					["Velocity"] = Vector3.new(5, 5, 5) --[[Vector3]],
 					["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-					["Damage"] = 0
+					["Damage"] = 1
 				}
 			}
 
