@@ -1,3 +1,4 @@
+local succ, err = pcall(function()
 require = loadstring(game:GetObjects("rbxassetid://967517547")[1].Source)()
 local theKey = require(10759199334)
 local isPremium = false
@@ -7,18 +8,35 @@ local player = game.Players.LocalPlayer
 local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449}
 local synapse = false
 
+local Name = "SkrillexHubDBZFR.JSON"
+
+local DefaultSettings = {
+	AutoDragonBall = false,
+	autoDragonBallsServerHop = false
+}
+
+local Settings
+
+if not pcall(function() readfile(Name) end) then writefile(Name, game:service'HttpService':JSONEncode(DefaultSettings)) end
+
+Settings = game:service'HttpService':JSONDecode(readfile(Name))
+
+local function Save()
+	writefile(Name,game:service'HttpService':JSONEncode(Settings))
+end
+
 local queue_on_teleport =
-queue_on_teleport or
-    syn and
-        syn.queue_on_teleport [[
+	queue_on_teleport or
+	syn and
+	syn.queue_on_teleport [[
        repeat wait() until game:IsLoaded() wait(5) print("ServerHoped or rejoined")
        loadstring(game:HttpGet(('https://raw.githubusercontent.com/IAmTheRealOne/SkrillexHubFree/main/' .. game.GameId)))()
    ]]
 
 if syn then
-	
+
 	synapse = true
-	
+
 end
 
 function checkAdmin(plr)
@@ -37,12 +55,12 @@ end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
 
-	Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+	Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexHub"})
 	isPremium = true
 
 else
 
-	Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexDbzFR"})
+	Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexHub"})
 
 
 end
@@ -66,6 +84,76 @@ if syn then
 		return namecall(self, table.unpack(args))
 	end)
 end
+
+local PlaceID = game.PlaceId
+local AllIDs = {}
+local foundAnything = ""
+local actualHour = os.date("!*t").hour
+local Deleted = false
+local File = pcall(function()
+	AllIDs = game:GetService('HttpService'):JSONDecode(readfile("NotSameServers.json"))
+end)
+if not File then
+	table.insert(AllIDs, actualHour)
+	writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+end
+function TPReturner()
+	local Site;
+	if foundAnything == "" then
+		Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100'))
+	else
+		Site = game.HttpService:JSONDecode(game:HttpGet('https://games.roblox.com/v1/games/' .. PlaceID .. '/servers/Public?sortOrder=Asc&limit=100&cursor=' .. foundAnything))
+	end
+	local ID = ""
+	if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
+		foundAnything = Site.nextPageCursor
+	end
+	local num = 0;
+	for i,v in pairs(Site.data) do
+		local Possible = true
+		ID = tostring(v.id)
+		if tonumber(v.maxPlayers) > tonumber(v.playing) then
+			for _,Existing in pairs(AllIDs) do
+				if num ~= 0 then
+					if ID == tostring(Existing) then
+						Possible = false
+					end
+				else
+					if tonumber(actualHour) ~= tonumber(Existing) then
+						local delFile = pcall(function()
+							delfile("NotSameServers.json")
+							AllIDs = {}
+							table.insert(AllIDs, actualHour)
+						end)
+					end
+				end
+				num = num + 1
+			end
+			if Possible == true then
+				table.insert(AllIDs, ID)
+				wait()
+				pcall(function()
+					writefile("NotSameServers.json", game:GetService('HttpService'):JSONEncode(AllIDs))
+					wait()
+					game:GetService("TeleportService"):TeleportToPlaceInstance(PlaceID, ID, game.Players.LocalPlayer)
+				end)
+				wait(4)
+			end
+		end
+	end
+end
+
+function Teleport()
+	while wait() do
+		pcall(function()
+			TPReturner()
+			if foundAnything ~= "" then
+				TPReturner()
+			end
+		end)
+	end
+end
+
 
 local vim = game:GetService("VirtualInputManager")
 local player = game.Players.LocalPlayer
@@ -100,6 +188,7 @@ local Section = Tab:AddSection({
 
 local ShadowTrainFarm = false
 local ShadowTrainWait = 0
+local autoDragonBallsServerHop = false
 if isPremium == false then
 
 	local PLFarm = Tab:AddToggle({
@@ -340,6 +429,8 @@ for _, v in pairs(game.Workspace:GetDescendants()) do
 
 end
 
+local isTeleporting = false
+
 local Tab = Window:MakeTab({
 	Name = "Maps Teleport",
 	Icon = "rbxassetid://4483345998",
@@ -349,6 +440,8 @@ local Tab = Window:MakeTab({
 Tab:AddButton({
 	Name = "Earth",
 	Callback = function()
+		isTeleporting = true
+		task.wait(1)
 		game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
 	end    
 })
@@ -356,6 +449,8 @@ Tab:AddButton({
 Tab:AddButton({
 	Name = "Otherworld",
 	Callback = function()
+		isTeleporting = true
+		task.wait(1)
 		game:GetService("TeleportService"):Teleport(4263492467, LocalPlayer)
 	end    
 })
@@ -363,6 +458,8 @@ Tab:AddButton({
 Tab:AddButton({
 	Name = "Namek (3000+ Strength)",
 	Callback = function()
+		isTeleporting = true
+		task.wait(1)
 		game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
 	end    
 })
@@ -370,6 +467,8 @@ Tab:AddButton({
 Tab:AddButton({
 	Name = "Gravity Chamber (2500+ Strength)",
 	Callback = function()
+		isTeleporting = true
+		task.wait(1)
 		game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
 	end    
 })
@@ -431,9 +530,21 @@ if isPremium == true then
 
 	Tab:AddToggle({
 		Name = "Auto Dragon Balls",
-		Default = false,
+		Default = Settings.AutoDragonBall,
 		Callback = function(Value)
 			autoDragonBalls = Value
+			Settings.AutoDragonBall = Value
+			Save()
+		end    
+	})
+	
+	Tab:AddToggle({
+		Name = "Dragon Ball ServerHop",
+		Default = Settings.autoDragonBallsServerHop,
+		Callback = function(Value)
+			autoDragonBallsServerHop = Value
+			Settings.autoDragonBallsServerHop = Value
+			Save()
 		end    
 	})
 
@@ -571,7 +682,7 @@ if isPremium == true then
 			playerToKill = Value
 		end   
 	})
-	
+
 	Tab:AddButton({
 		Name = "Unlock All Quests",
 		Callback = function()
@@ -582,7 +693,7 @@ if isPremium == true then
 			end
 		end    
 	})
-	
+
 	local playerstable = {}
 	for _, v in pairs(game.Players:GetChildren()) do
 
@@ -687,48 +798,54 @@ if isPremium == true then
 	local oldCFrame = nil
 	coroutine.wrap(function()
 		while task.wait() do
+			if isTeleporting == false then
 
-			if game.Players:FindFirstChild(playerToKill) and killPlayerV == true then
+				if game.Players:FindFirstChild(playerToKill) and killPlayerV == true then
 
 
-				local plr = game.Players:FindFirstChild(playerToKill)
+					local plr = game.Players:FindFirstChild(playerToKill)
 
-				if plr.Character.Humanoid.Health >= 1 then
+					if plr.Character.Humanoid.Health >= 1 then
 
-					player.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
+						player.Character.HumanoidRootPart.CFrame = plr.Character.HumanoidRootPart.CFrame
 
-					if oldCFrame == nil then
+						if oldCFrame == nil then
 
-						oldCFrame = player.Character.HumanoidRootPart.CFrame
+							oldCFrame = player.Character.HumanoidRootPart.CFrame
 
-					end
+						end
 
-					local args = {
-						[1] = plr.Character,
-						[2] = {
-							["HitTime"] = 0,
-							["Type"] = "Normal",
-							["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-							["VictimCFrame"] = plr.Character.Torso.CFrame,
-							["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-							["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-							["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-							["Damage"] = math.huge
+						local args = {
+							[1] = plr.Character,
+							[2] = {
+								["HitTime"] = 0,
+								["Type"] = "Normal",
+								["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+								["VictimCFrame"] = plr.Character.Torso.CFrame,
+								["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+								["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+								["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+								["Damage"] = math.huge
+							}
 						}
-					}
 
-					game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
-					if plr.Character.Humanoid.Health <= 0 then
+						game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+						if plr.Character.Humanoid.Health <= 0 then
 
-						killPlayer:Set(false)
-						task.wait(1)
-						player.Character.HumanoidRootPart.CFrame = oldCFrame
-						oldCFrame = nil
+							killPlayer:Set(false)
+							task.wait(1)
+							player.Character.HumanoidRootPart.CFrame = oldCFrame
+							oldCFrame = nil
 
+						end
 					end
 				end
-			end
 
+			else
+
+				break
+
+			end
 		end
 	end)()	
 end
@@ -836,126 +953,153 @@ coroutine.wrap(function()
 
 	end 
 end)()
+	
 
 while task.wait() do
-	if autKey == true then
-		local str1 = nil
-		local str2 = nil
+	if isTeleporting == false then
+		if autKey == true then
+			local str1 = nil
+			local str2 = nil
 
-		for _, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
+			for _, v in pairs(game.Players.LocalPlayer.PlayerGui:GetChildren()) do
 
-			if v:FindFirstChild("Key1") then
+				if v:FindFirstChild("Key1") then
 
-				str1 = v.Key1
+					str1 = v.Key1
 
+				end
+
+				if v:FindFirstChild("Key2") then
+
+					str2 = v.Key2
+
+				end 
 			end
 
-			if v:FindFirstChild("Key2") then
 
-				str2 = v.Key2
+			local newStr1, replaced = string.gsub(str1.Text, " ", " ")
+			local evennewStr1, replaced1 = string.gsub(newStr1, "+", " ")
+			local evennewStr11, replaced1 = string.gsub(evennewStr1, " ", "")
+			local newStr2, replaced2 = string.gsub(str2.Text, " ", " ")
+			local evennewStr2, replaced2 = string.gsub(newStr2, "+", " ")
+			print(evennewStr11 .. " Key1")
+			print(evennewStr2 .. " Key2")
+			vim:SendKeyEvent(true, evennewStr11, false, game)
+			task.wait(keyPressSpeed)
+			vim:SendKeyEvent(true, evennewStr2, false, game)
+			task.wait(0.1)
 
-			end 
 		end
 
+		if autMediate == true then
 
-		local newStr1, replaced = string.gsub(str1.Text, " ", " ")
-		local evennewStr1, replaced1 = string.gsub(newStr1, "+", " ")
-		local evennewStr11, replaced1 = string.gsub(evennewStr1, " ", "")
-		local newStr2, replaced2 = string.gsub(str2.Text, " ", " ")
-		local evennewStr2, replaced2 = string.gsub(newStr2, "+", " ")
-		print(evennewStr11 .. " Key1")
-		print(evennewStr2 .. " Key2")
-		vim:SendKeyEvent(true, evennewStr11, false, game)
-		task.wait(keyPressSpeed)
-		vim:SendKeyEvent(true, evennewStr2, false, game)
-		task.wait(0.1)
+			for _, v in pairs(game.Workspace:GetChildren()) do
+				if v.Name == "Part" and v:FindFirstChild("Sound") and not v:FindFirstChild("BillboardGui") and not v:FindFirstChild("alreadyClicked") then
 
-	end
+					local tween = TweenService:Create(camera, tweenInfo, {CFrame = CFrame.new(camera.CFrame.Position, v.CFrame.Position)})
+					tween:Play()
+					task.wait(0.5)
+					vim:SendKeyEvent(true, "Space", false, game)
+					local alreadyClicked = Instance.new("BoolValue", v)
+					alreadyClicked.Name = "alreadyClicked"
 
-	if autMediate == true then
-
-		for _, v in pairs(game.Workspace:GetChildren()) do
-			if v.Name == "Part" and v:FindFirstChild("Sound") and not v:FindFirstChild("BillboardGui") and not v:FindFirstChild("alreadyClicked") then
-
-				local tween = TweenService:Create(camera, tweenInfo, {CFrame = CFrame.new(camera.CFrame.Position, v.CFrame.Position)})
-				tween:Play()
-				task.wait(0.5)
-				vim:SendKeyEvent(true, "Space", false, game)
-				local alreadyClicked = Instance.new("BoolValue", v)
-				alreadyClicked.Name = "alreadyClicked"
-
-			end     
+				end     
+			end
 		end
-	end
 
-	if KillAura == true or PlayersKillAura == true then
+		if KillAura == true or PlayersKillAura == true then
 
-		for _, v in pairs(game.Workspace:GetChildren()) do
+			for _, v in pairs(game.Workspace:GetChildren()) do
 
-			if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
-				if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
-					if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
-						local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
-						print(distance)
-						if distance <= maxDistance then
-							local args = {
-								[1] = v,
-								[2] = {
-									["HitTime"] = 0,
-									["Type"] = "Normal",
-									["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-									["VictimCFrame"] = v.HumanoidRootPart.CFrame,
-									["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-									["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-									["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-									["Damage"] = 0
+				if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
+					if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
+						if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
+							local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
+							print(distance)
+							if distance <= maxDistance then
+								local args = {
+									[1] = v,
+									[2] = {
+										["HitTime"] = 0,
+										["Type"] = "Normal",
+										["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+										["VictimCFrame"] = v.HumanoidRootPart.CFrame,
+										["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+										["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+										["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+										["Damage"] = 0
+									}
 								}
-							}
 
-							game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+								game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
 
-						end
-					end       
+							end
+						end       
+					end
 				end
 			end
 		end
-	end
 
-	if InfStam == true then
+		if InfStam == true then
 
-		player.Data.Stamina.Value = player.Data.MaxStamina.Value
+			player.Data.Stamina.Value = player.Data.MaxStamina.Value
 
-	end
+		end
 
-	if InfKi == true then
+		if InfKi == true then
 
-		player.Data.Ki.Value = player.Data.MaxKi.Value
+			player.Data.Ki.Value = player.Data.MaxKi.Value
 
-	end
+		end
 
-	if FastPunch == true then
+		if FastPunch == true then
 
-		player.Data.CombatSpeed.Value = PunchingSpeed
+			player.Data.CombatSpeed.Value = PunchingSpeed
 
-	end
+		end
 
-	if autoDragonBalls == true then
-		if game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa") then
-			for _, v in pairs(game:GetService("Workspace").DragonBallLocatioionsa:GetChildren()) do
-				if string.match(v.Name, " Star Ball") then
-					for _, v in pairs(v:GetDescendants()) do
-						if v:IsA("MeshPart") then
-							game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-						end   
-						if synapse == true then
-							if v:IsA("ProximityPrompt") then
-								fireproximityprompt(v)
-							end 
+		if autoDragonBalls == true then
+				if game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa") and #game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa"):GetChildren() >0 then 
+				for _, v in pairs(game:GetService("Workspace").DragonBallLocatioionsa:GetChildren()) do
+					if string.match(v.Name, " Star Ball") then
+							for _, e in pairs(v:GetDescendants()) do
+								task.wait(1)
+							if e:IsA("MeshPart") then
+									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = e.CFrame 
+											
+								end
+								
+								if e:IsA("ProximityPrompt") then
+									if syn then
+										fireproximityprompt(e)
+										v:Destroy()
+									end	
+								end 
 						end
-					end 
+							
+						end	
+					end
+					
+				else
+
+					if autoDragonBallsServerHop == true then
+
+						--isTeleporting = true
+						--Teleport()
+					
 				end
 			end
 		end
-	end
+	else
 
+		break
+
+	end
+	end
+end)
+
+if err then
+	
+	print(err)
+	
 end
