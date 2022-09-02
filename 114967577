@@ -1015,7 +1015,6 @@ while task.wait() do
 					if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
 						if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
 							local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
-							print(distance)
 							if distance <= maxDistance then
 								local args = {
 									[1] = v,
