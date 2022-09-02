@@ -192,7 +192,7 @@ local succ, err = pcall(function()
 	if isPremium == false then
 
 		local PLFarm = Tab:AddToggle({
-			Name = "Fast PL Farm",
+			Name = "PL Farm",
 			Default = false,
 			Callback = function(Value)
 				local Pos1 = player.Character.HumanoidRootPart.Position.Y
