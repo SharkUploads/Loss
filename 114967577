@@ -1107,9 +1107,3 @@ local succ, err = pcall(function()
 		end
 	end
 end)
-
-if err then
-
-	print(err)
-
-end
