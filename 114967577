@@ -164,7 +164,6 @@ local succ, err = pcall(function()
 
 	local autKey = false
 	local autMediate
-	canPrint = false
 
 	local TweenService = game:GetService("TweenService")
 
@@ -442,7 +441,7 @@ local succ, err = pcall(function()
 		Callback = function()
 			isTeleporting = true
 			task.wait(1)
-			game:GetService("TeleportService"):Teleport(298400657, LocalPlayer)
+			game:GetService("TeleportService"):Teleport(298400657, player)
 		end    
 	})
 
@@ -451,7 +450,7 @@ local succ, err = pcall(function()
 		Callback = function()
 			isTeleporting = true
 			task.wait(1)
-			game:GetService("TeleportService"):Teleport(4263492467, LocalPlayer)
+			game:GetService("TeleportService"):Teleport(4263492467, player)
 		end    
 	})
 
@@ -460,7 +459,7 @@ local succ, err = pcall(function()
 		Callback = function()
 			isTeleporting = true
 			task.wait(1)
-			game:GetService("TeleportService"):Teleport(4761949056, LocalPlayer)
+			game:GetService("TeleportService"):Teleport(4761949056, player)
 		end    
 	})
 
@@ -469,7 +468,7 @@ local succ, err = pcall(function()
 		Callback = function()
 			isTeleporting = true
 			task.wait(1)
-			game:GetService("TeleportService"):Teleport(5798060869, LocalPlayer)
+			game:GetService("TeleportService"):Teleport(5798060869, player)
 		end    
 	})
 
@@ -510,7 +509,7 @@ local succ, err = pcall(function()
 				ShadowTrainWait = Value
 			end    
 		})
-		
+
 		Tab:AddToggle({
 			Name = "Players Kill Aura",
 			Default = false,
@@ -684,62 +683,66 @@ local succ, err = pcall(function()
 				playerToKill = Value
 			end   
 		})
-		
-		local Skill = nil
-		Tab:AddDropdown({
-			Name = "Ki Skills",
-			Default = "None",
-			Options = {"Energy Wave", "Kamehameha", "Galick Gun", "Heat Dome Attack", "Masenko", "Death Beam", "Small Spirit Bomb", "Final Flash", "One Handed Kamehameha", "Super Black Kamehameha", "Angry Kamehameha", "Promenince Flash", "Kaioken Kamehameha", "Special Beam Cannon", "X10 Kamehameha", "Final Shine Attack", "Super Kamehameha", "Large Spirit Bomb", "Dodon Ray", "Hidden Potential", "Hyper Masenko", "Big Bang Attack", "Big Bang Kamehameha", "Instant Transmission Kamehameha", "Earth Splitting Galick Gun", "Super Energy Wave", "Destructo Disc", "Super Destructo Disc", "Ultra Big Bang Attack", "Last Emperor", "Supernova", "Tyrant Lancer", "Riot Javelin", "Prominence Kamehameha", "Final Kamehameha"},
-			Callback = function(Value)
-				Skill = Value
-			end   
-		})
-		
-		Tab:AddDropdown({
-			Name = "Melee Skills",
-			Default = "None",
-			Options = {"Meteor Blow", "Dragon Throw", "Wild Hunt", "Senko Ki Blast", "Super God Fist", "Mystic Kick", "Raid Blast", "God Kamehameha", "Burning Slash", "Destructive Crash", "Time Skip/Molotov", "Sledge Hammer", "Meteor Combination", "Final Galick Rush", "Kiai [Evastive]", "Solar Flare [Evastive]", "Saturday Blast", "Taco Slap", "Spirit Stab", "Spirit Sword", "Punisher Drive", "Final Flash Rush", "Kaioken Attack", "Fake Death", "Wolf Fang Fist", "Neo Wolf Fang Fist", "Orin Combo", "Super Dragon Hammer"},
-			Callback = function(Value)
-				Skill = Value
-			end   
-		})
-		
-		Tab:AddDropdown({
-			Name = "Boosts Skills",
-			Default = "None",
-			Options = {"Rise To Action", "Unlock Ki: Form Of Ki", "Spirit Saiyan", "Pressure Sign", "Full Power SSJ4", "Unlock Ki: Form Of Life", "Unlock Ki: Form Of Recovery"},
-			Callback = function(Value)
-				Skill = Value
-			end   
-		})
-		
-		  Tab:AddDropdown({
-			Name = "Slots",
-			Default = "1",
-			Options = {"1", "2", "3", "4"},
-			Callback = function(Value)
-				if Value == "1" then
-					game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 3})
-				elseif Value == "3" then
-					game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 2})
-				elseif Value == "2" then
-					game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 4})
-				elseif Value == "4" then
-					game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 1})					
-				end	
-			end   
-		})
 
-		Tab:AddButton({
-			Name = "Unlock All Quests",
-			Callback = function()
-				for _, v in pairs(game:GetService("Workspace").Quests:GetChildren()) do
+		local succ, err = pcall(function()
+			local Skill = nil
+			Tab:AddDropdown({
+				Name = "Ki Skills",
+				Default = "None",
+				Options = {"Energy Wave", "Kamehameha", "Galick Gun", "Heat Dome Attack", "Masenko", "Death Beam", "Small Spirit Bomb", "Final Flash", "One Handed Kamehameha", "Super Black Kamehameha", "Angry Kamehameha", "Promenince Flash", "Kaioken Kamehameha", "Special Beam Cannon", "X10 Kamehameha", "Final Shine Attack", "Super Kamehameha", "Large Spirit Bomb", "Dodon Ray", "Hidden Potential", "Hyper Masenko", "Big Bang Attack", "Big Bang Kamehameha", "Instant Transmission Kamehameha", "Earth Splitting Galick Gun", "Super Energy Wave", "Destructo Disc", "Super Destructo Disc", "Ultra Big Bang Attack", "Last Emperor", "Supernova", "Tyrant Lancer", "Riot Javelin", "Prominence Kamehameha", "Final Kamehameha"},
+				Callback = function(Value)
+					Skill = Value
+				end   
+			})
 
-					v.LevelReq.Value = 0
+			Tab:AddDropdown({
+				Name = "Melee Skills",
+				Default = "None",
+				Options = {"Meteor Blow", "Dragon Throw", "Wild Hunt", "Senko Ki Blast", "Super God Fist", "Mystic Kick", "Raid Blast", "God Kamehameha", "Burning Slash", "Destructive Crash", "Time Skip/Molotov", "Sledge Hammer", "Meteor Combination", "Final Galick Rush", "Kiai [Evastive]", "Solar Flare [Evastive]", "Saturday Blast", "Taco Slap", "Spirit Stab", "Spirit Sword", "Punisher Drive", "Final Flash Rush", "Kaioken Attack", "Fake Death", "Wolf Fang Fist", "Neo Wolf Fang Fist", "Orin Combo", "Super Dragon Hammer"},
+				Callback = function(Value)
+					Skill = Value
+				end   
+			})
 
-				end
-			end    
-		})
+			Tab:AddDropdown({
+				Name = "Boosts Skills",
+				Default = "None",
+				Options = {"Rise To Action", "Unlock Ki: Form Of Ki", "Spirit Saiyan", "Pressure Sign", "Full Power SSJ4", "Unlock Ki: Form Of Life", "Unlock Ki: Form Of Recovery"},
+				Callback = function(Value)
+					Skill = Value
+				end   
+			})
+
+			Tab:AddDropdown({
+				Name = "Slots",
+				Default = "1",
+				Options = {"1", "2", "3", "4"},
+				Callback = function(Value)
+					if Skill ~= nil then
+						if Value == "1" then
+							game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 3})
+						elseif Value == "3" then
+							game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 2})
+						elseif Value == "2" then
+							game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 4})
+						elseif Value == "4" then
+							game:GetService("ReplicatedStorage").Remotes.KeyAttack:FireServer({Skill, 1})					
+						end	
+					end
+				end   
+			})
+
+			Tab:AddButton({
+				Name = "Unlock All Quests",
+				Callback = function()
+					for _, v in pairs(game:GetService("Workspace").Quests:GetChildren()) do
+
+						v.LevelReq.Value = 0
+
+					end
+				end    
+			})
+		end)
 
 		local playerstable = {}
 		for _, v in pairs(game.Players:GetChildren()) do
@@ -815,7 +818,7 @@ local succ, err = pcall(function()
 						["embeds"] = {
 							{
 								["title"] = "Skrillex Hub Bot",
-								["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
+								["description"] = "Admin joined, User: " .. v.Name .. ", UserId: " .. v.UserId ,
 								["type"] = "rich",
 								["color"] = tonumber(0x7269da),
 								["image"] = {
@@ -961,13 +964,13 @@ local succ, err = pcall(function()
 		while task.wait(ShadowTrainWait) do
 
 			if ShadowTrainFarm == true then
-				
+
 				if KillAura == true and isPremium == false then
-					
+
 					killauraToggle:Set(false)
-					
+
 				end
-				
+
 				if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
 
 					local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
@@ -1002,7 +1005,7 @@ local succ, err = pcall(function()
 					end
 
 				end
-				
+
 			end	
 
 		end 
@@ -1093,6 +1096,7 @@ local succ, err = pcall(function()
 				end
 			end
 
+
 			if InfStam == true then
 
 				player.Data.Stamina.Value = player.Data.MaxStamina.Value
@@ -1142,8 +1146,8 @@ local succ, err = pcall(function()
 					end
 				end
 			end
-			
-				
+
+
 		else
 
 			break
