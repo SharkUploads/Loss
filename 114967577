@@ -539,14 +539,25 @@ local succ, err = pcall(function()
 			end    
 		})
 
-		Tab:AddToggle({
+		Tab:AddButton({
 			Name = "Dragon Ball ServerHop",
-			Default = Settings.autoDragonBallsServerHop,
 			Callback = function(Value)
-				autoDragonBallsServerHop = Value
-				Settings.autoDragonBallsServerHop = Value
-				Save()
-			end    
+				if game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa") and #game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa"):GetChildren() >0 then
+
+					OrionLib:MakeNotification({
+						Name = "Skrillex Hub",
+						Content = "There is a dragon ball!",
+						Image = "rbxassetid://4483345998",
+						Time = 5
+					})
+
+				else		
+
+					isTeleporting = true
+					task.wait(1)						
+					Teleport()
+				end
+			end
 		})
 
 		Tab:AddDropdown({
@@ -1134,14 +1145,6 @@ local succ, err = pcall(function()
 						end	
 					end
 
-				else
-
-					if autoDragonBallsServerHop == true then
-
-						--isTeleporting = true
-						--Teleport()
-
-					end
 				end
 			end
 
