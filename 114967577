@@ -1294,12 +1294,30 @@ local succ, err = pcall(function()
 						
 						nextTimeNotifyAt:Set("Next notify: " .. timeToNotify)
 						
-						if tempo >= timeToNotify and webhook ~= nil then
+						if tempo >= timeToNotify then
 							
 							timeToNotify = nil
 							nextTimeNotifyAt:Set("0:00:00")
+							
+							OrionLib:MakeNotification({
+								Name = "Skrillex Hub",
+								Content = "Your Server Reached: " .. tempo .. "!",
+								Image = "rbxassetid://4483345998",
+								Time = 5
+							}) 
+							
+							if dropdown3 == "Webhook" then
+						
 							Webhook("Your Server Reached: " .. tempo .. "!", nil)
-					
+								
+							else
+								
+								local audio = Instance.new("Sound", game.Workspace)
+								audio.SoundId = "rbxassetid://835068435"
+								audio.Volume = 10
+								audio:Play()
+								
+							end	
 					end
 				end
 				end)
@@ -1325,9 +1343,3 @@ local succ, err = pcall(function()
 	end
 	
 end)
-
-if err then
-	
-	print(err)
-	
-end
