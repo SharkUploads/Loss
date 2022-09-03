@@ -247,7 +247,7 @@ local succ, err = pcall(function()
 		end    
 	})
 
-    local KillAuraWait = 0
+	local KillAuraWait = 0
 	local maxDistance = 15
 	local KillAura = false
 	local firstTimeKillAura = false
@@ -269,7 +269,7 @@ local succ, err = pcall(function()
 			end
 		end    
 	})
-	
+
 	Tab:AddSlider({
 		Name = "Kill Aura Speed",
 		Min = 0,
@@ -295,7 +295,7 @@ local succ, err = pcall(function()
 			maxDistance = Value
 		end    
 	})
-	
+
 	local keyPressSpeed = 0.1
 	Tab:AddSlider({
 		Name = "Auto Gravity Chamber Speed",
@@ -679,6 +679,62 @@ local succ, err = pcall(function()
 
 		local killPlayerV = false
 		local firstTimeKillPlayer = false
+
+		Tab:AddButton({
+			Name = "Teleport To Player",
+			Callback = function(Value)
+
+				if playerToKill ~= nil and game.Players:FindFirstChild(playerToKill) then
+
+					player.Character.HumanoidRootPart.CFrame = game.Players:FindFirstChild(playerToKill).Character.HumanoidRootPart.CFrame
+
+				else
+
+					OrionLib:MakeNotification({
+						Name = "Skrillex Hub",
+						Content = "Player: " .. "[" .. playerToKill .. "]" .. " Not Found",
+						Image = "rbxassetid://4483345998",
+						Time = 5
+					})
+
+				end
+
+			end    
+		})
+		
+		Tab:AddToggle({
+			Name = "Spectate Player",
+			Default = false,
+			Callback = function(Value)
+				
+				local succ, err = pcall(function()
+				if playerToKill ~= nil or game.Players:FindFirstChild(playerToKill) then
+					
+					if Value == true then
+
+						game.Workspace.Camera.CameraSubject = game.Players:FindFirstChild(playerToKill).Character.Humanoid
+
+					else
+
+						game.Workspace.Camera.CameraSubject = player.Character.Humanoid
+
+					end
+
+				else
+
+					OrionLib:MakeNotification({
+						Name = "Skrillex Hub",
+						Content = "Player: " .. "[" .. playerToKill .. "]" .. " Not Found",
+						Image = "rbxassetid://4483345998",
+						Time = 5
+					})
+
+					end
+				end)
+			end    
+		})
+		
+
 		local killPlayer = Tab:AddToggle({
 			Name = "Kill Player",
 			Default = false,
@@ -826,9 +882,9 @@ local succ, err = pcall(function()
 				end
 			end
 		end)
-		
+
 		players.PlayerRemoving:Connect(function(plr)
-			
+
 			dd:Refresh(playerstable, true)
 
 			for _, v in pairs(game.Players:GetChildren()) do
@@ -838,7 +894,7 @@ local succ, err = pcall(function()
 			end
 
 			dd:Refresh(playerstable)		
-			
+
 		end)
 
 		for _, v in pairs(players:GetChildren()) do
@@ -1099,13 +1155,13 @@ local succ, err = pcall(function()
 			end
 
 			if KillAura == true or PlayersKillAura == true then
-				
+
 				if ShadowTrainFarm == false then
-					
+
 					task.wait(KillAuraWait)
-					
+
 				end
-				
+
 				for _, v in pairs(game.Workspace:GetChildren()) do
 
 					if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
