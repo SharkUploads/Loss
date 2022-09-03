@@ -24,7 +24,8 @@ local succ, err = pcall(function()
 	local function Save()
 		writefile(Name,game:service'HttpService':JSONEncode(Settings))
 	end
-
+	
+	if syn then
 	local queue_on_teleport =
 		queue_on_teleport or
 		syn and
@@ -32,7 +33,8 @@ local succ, err = pcall(function()
        repeat wait() until game:IsLoaded() wait(10) print("ServerHoped or rejoined")
        loadstring(game:HttpGet(('https://raw.githubusercontent.com/IAmTheRealOne/SkrillexHubFree/main/' .. game.GameId)))()
    ]]
-
+	end
+	
 	if syn then
 
 		synapse = true
