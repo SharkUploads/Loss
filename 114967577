@@ -247,7 +247,7 @@ local succ, err = pcall(function()
 		end    
 	})
 
-
+    local KillAuraWait = 0
 	local maxDistance = 15
 	local KillAura = false
 	local firstTimeKillAura = false
@@ -269,6 +269,19 @@ local succ, err = pcall(function()
 			end
 		end    
 	})
+	
+	Tab:AddSlider({
+		Name = "Kill Aura Speed",
+		Min = 0,
+		Max = 1,
+		Default = 0,
+		Color = Color3.fromRGB(255,255,255),
+		Increment = 0.01,
+		ValueName = "Seconds",
+		Callback = function(Value)
+			KillAuraWait = Value
+		end    
+	})
 
 	Tab:AddSlider({
 		Name = "Kill Aura Distance",
@@ -282,7 +295,7 @@ local succ, err = pcall(function()
 			maxDistance = Value
 		end    
 	})
-
+	
 	local keyPressSpeed = 0.1
 	Tab:AddSlider({
 		Name = "Auto Gravity Chamber Speed",
@@ -1074,7 +1087,13 @@ local succ, err = pcall(function()
 			end
 
 			if KillAura == true or PlayersKillAura == true then
-
+				
+				if ShadowTrainFarm == false then
+					
+					task.wait(KillAuraWait)
+					
+				end
+				
 				for _, v in pairs(game.Workspace:GetChildren()) do
 
 					if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
@@ -1125,11 +1144,11 @@ local succ, err = pcall(function()
 			end
 
 			if autoDragonBalls == true then
+				task.wait(1)
 				if game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa") and #game:GetService("Workspace"):FindFirstChild("DragonBallLocatioionsa"):GetChildren() >0 then 
 					for _, v in pairs(game:GetService("Workspace").DragonBallLocatioionsa:GetChildren()) do
 						if string.match(v.Name, " Star Ball") then
 							for _, e in pairs(v:GetDescendants()) do
-								task.wait(1)
 								if e:IsA("MeshPart") then
 									game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = e.CFrame 
 
