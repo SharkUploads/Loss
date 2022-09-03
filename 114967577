@@ -1125,7 +1125,6 @@ local succ, err = pcall(function()
 								if e:IsA("ProximityPrompt") then
 									if syn then
 										fireproximityprompt(e)
-										v:Destroy()
 									end	
 								end 
 							end
