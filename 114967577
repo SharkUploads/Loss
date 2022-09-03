@@ -779,9 +779,7 @@ local succ, err = pcall(function()
 
 		players.PlayerAdded:Connect(function(plr)
 
-			for k in pairs(playerstable) do
-				k [k] = nil
-			end
+			dd:Refresh(playerstable, true)
 
 			for _, v in pairs(game.Players:GetChildren()) do
 
@@ -827,6 +825,20 @@ local succ, err = pcall(function()
 
 				end
 			end
+		end)
+		
+		players.PlayerRemoving:Connect(function(plr)
+			
+			dd:Refresh(playerstable, true)
+
+			for _, v in pairs(game.Players:GetChildren()) do
+
+				table.insert(playerstable, v.Name)
+
+			end
+
+			dd:Refresh(playerstable)		
+			
 		end)
 
 		for _, v in pairs(players:GetChildren()) do
