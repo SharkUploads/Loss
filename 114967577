@@ -30,7 +30,7 @@ local succ, err = pcall(function()
 		queue_on_teleport or
 		syn and
 		syn.queue_on_teleport [[
-       repeat wait() until game:IsLoaded() wait(10) print("ServerHoped or rejoined")
+       repeat wait(3) until game:IsLoaded() wait(10) print("ServerHoped or rejoined")
        loadstring(game:HttpGet(('https://raw.githubusercontent.com/IAmTheRealOne/SkrillexHubFree/main/' .. game.GameId)))()
    ]]
 	end
