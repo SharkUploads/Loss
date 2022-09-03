@@ -4,6 +4,21 @@ local succ, err = pcall(function()
 	local isPremium = false
 	local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 	local Window = nil
+	
+	local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+
+local OldNameCall 
+OldNameCall = hookmetamethod(game, "__namecall", function(...) 
+    local Self, Args = (...), ({select(2, ...)})
+
+    if getnamecallmethod() == "Kick" and Self == Player then 
+        return
+    end
+
+    return OldNameCall(...)
+end)
+	
 	local player = game.Players.LocalPlayer
 	local adminIds = {85430711, 267468570, 70433390, 75027435, 69246543, 72978317, 375454798, 34309522, 31856449}
 	local synapse = false
