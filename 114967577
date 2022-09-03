@@ -12,9 +12,10 @@ local succ, err = pcall(function()
 
 	local DefaultSettings = {
 		AutoDragonBall = false,
-		autoDragonBallsServerHop = false
+		autoDragonBallsServerHop = false,
+		WebHook = nil
 	}
-
+	
 	local Settings
 
 	if not pcall(function() readfile(Name) end) then writefile(Name, game:service'HttpService':JSONEncode(DefaultSettings)) end
@@ -174,7 +175,18 @@ local succ, err = pcall(function()
 
 
 	local UIS = game:GetService("UserInputService")
+	
+	if Settings.WebHook ~= nil then
+		
+		OrionLib:MakeNotification({
+			Name = "Skrillex Hub",
+			Content = "Current Webhook: " .. Settings.WebHook,
+			Image = "rbxassetid://4483345998",
+			Time = 5
+		})
 
+	end
+	
 	local Tab = Window:MakeTab({
 		Name = "Auto Farm",
 		Icon = "rbxassetid://4483345998",
@@ -246,7 +258,7 @@ local succ, err = pcall(function()
 			autKey = Value
 		end    
 	})
-
+	
 	local KillAuraWait = 0
 	local maxDistance = 15
 	local KillAura = false
@@ -494,6 +506,54 @@ local succ, err = pcall(function()
 	local autoDragonBalls = false
 	local PlayersKillAura = false	
 	local UltraShadowTrainFarm = false
+	local timer = nil
+	local dropdown3 = nil
+	local timeToNotify = nil
+	local nextTimeNotifyAt = nil
+	
+	if Settings.WebHook ~= nil then
+		
+		webhook = Settings.WebHook
+		
+	end
+	
+	function Webhook(message, title)
+		
+		print(webhook)
+		if title == nil then
+			
+			title = "Skrillex Hub Bot"
+			
+		end
+		
+		local url =
+			webhook
+		local data = {
+			["content"] = "",
+			["embeds"] = {
+				{
+					["title"] = title,
+					["description"] = message,
+					["type"] = "rich",
+					["color"] = tonumber(0x7269da),
+					["image"] = {
+						["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
+							tostring(game:GetService("Players").LocalPlayer.Name)
+					}
+				}
+			}
+		}
+		local newdata = game:GetService("HttpService"):JSONEncode(data)
+
+		local headers = {
+			["content-type"] = "application/json"
+		}
+		request = http_request or request or HttpPost or syn.request
+		local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
+		request(abcdef)
+
+	end
+	 
 	if isPremium == true then
 
 		local Tab = Window:MakeTab({
@@ -597,6 +657,8 @@ local succ, err = pcall(function()
 			TextDisappear = false,
 			Callback = function(Value)
 				webhook = Value
+				Settings.WebHook = Value
+				Save()
 			end	  
 		})
 
@@ -619,31 +681,7 @@ local succ, err = pcall(function()
 
 				elseif dropdown == "Webhook" then
 
-					local url =
-						webhook
-					local data = {
-						["content"] = "",
-						["embeds"] = {
-							{
-								["title"] = "Skrillex Hub Bot",
-								["description"] = "You Reached " .. strengthSelected .. "+" .. " Strength",
-								["type"] = "rich",
-								["color"] = tonumber(0x7269da),
-								["image"] = {
-									["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-										tostring(game:GetService("Players").LocalPlayer.Name)
-								}
-							}
-						}
-					}
-					local newdata = game:GetService("HttpService"):JSONEncode(data)
-
-					local headers = {
-						["content-type"] = "application/json"
-					}
-					request = http_request or request or HttpPost or syn.request
-					local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-					request(abcdef)
+					Webhook("You Reached " .. strengthSelected .. "+" .. " Strength", nil)
 
 				elseif dropdown == "Kick" then
 
@@ -674,6 +712,8 @@ local succ, err = pcall(function()
 			TextDisappear = false,
 			Callback = function(Value)
 				webhook = Value
+				Settings.WebHook = Value
+				Save()
 			end	  
 		})
 
@@ -849,32 +889,8 @@ local succ, err = pcall(function()
 
 				if dropdown2 == "Webhook" then
 
-					local url =
-						webhook
-					local data = {
-						["content"] = "",
-						["embeds"] = {
-							{
-								["title"] = "Skrillex Hub Bot",
-								["description"] = "Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId ,
-								["type"] = "rich",
-								["color"] = tonumber(0x7269da),
-								["image"] = {
-									["url"] = "http://www.roblox.com/Thumbs/Avatar.ashx?x=150&y=150&Format=Png&username=" ..
-										tostring(game:GetService("Players").LocalPlayer.Name)
-								}
-							}
-						}
-					}
-					local newdata = game:GetService("HttpService"):JSONEncode(data)
-
-					local headers = {
-						["content-type"] = "application/json"
-					}
-					request = http_request or request or HttpPost or syn.request
-					local abcdef = {Url = url, Body = newdata, Method = "POST", Headers = headers}
-					request(abcdef)
-
+				Webhook("Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId, nil)
+					
 				elseif dropdown2 == "Kick" then
 
 					player:Kick("Admin Detected")
@@ -936,7 +952,35 @@ local succ, err = pcall(function()
 				end
 			end
 		end
-
+		
+		local Tab = Window:MakeTab({
+			Name = "Paid 3",
+			Icon = "rbxassetid://4483345998",
+			PremiumOnly = false
+		})
+		
+		Tab:AddDropdown({
+			Name = "Timer Notifier",
+			Default = "None",
+			Options = {"None", "Sound", "Webhook"},
+			Callback = function(Value)
+				dropdown3 = Value
+			end   
+		})
+		
+		Tab:AddTextbox({
+			Name = "Notify At",
+			Default = "",
+			TextDisappear = true,
+			Callback = function(Value)
+				timeToNotify = Value
+			end	  
+		})
+		
+		timer = Tab:AddLabel("Label")
+		
+		nextTimeNotifyAt = Tab:AddLabel("0:00:00")
+		
 		local oldCFrame = nil
 		coroutine.wrap(function()
 			while task.wait() do
@@ -1234,7 +1278,44 @@ local succ, err = pcall(function()
 
 				end
 			end
+			
+			if isPremium and timer ~= nil then
+				
+				local scripttime=game.Workspace.DistributedGameTime
+				local seconds = scripttime%60
+				local minutes = math.floor(scripttime/60%60)
+				local hours = math.floor(scripttime/3600)
+				local tempo = string.format("%.0f:%.0f:%.0f", hours ,minutes, seconds)
+				timer:Set(tempo)
 
+				local success, err = pcall(function()
+					
+					if timeToNotify ~= nil then
+						
+						nextTimeNotifyAt:Set("Next notify: " .. timeToNotify)
+						
+						if tempo >= timeToNotify and webhook ~= nil then
+							
+							timeToNotify = nil
+							nextTimeNotifyAt:Set("0:00:00")
+							Webhook("Your Server Reached: " .. tempo .. "!", nil)
+					
+					end
+				end
+				end)
+				
+				if err then
+
+					OrionLib:MakeNotification({
+						Name = "Skrillex Hub",
+						Content = "Something Gone Wrong With Timer",
+						Image = "rbxassetid://4483345998",
+						Time = 5
+					}) 
+
+				end
+				
+			end
 
 		else
 
@@ -1242,4 +1323,11 @@ local succ, err = pcall(function()
 
 		end
 	end
+	
 end)
+
+if err then
+	
+	print(err)
+	
+end
