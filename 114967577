@@ -1236,6 +1236,8 @@ local succ, err = pcall(function()
 					task.wait(KillAuraWait)
 
 				end
+				
+				local success, err = pcall(function()
 
 				for _, v in pairs(game.Workspace:GetChildren()) do
 
@@ -1265,8 +1267,8 @@ local succ, err = pcall(function()
 						end
 					end
 				end
-			end
-
+				end)
+end
 
 			if InfStam == true then
 
