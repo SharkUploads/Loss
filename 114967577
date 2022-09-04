@@ -1153,15 +1153,13 @@ local succ, err = pcall(function()
 
 					local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
 
-					player.Character.HumanoidRootPart.CFrame = shadow.HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
-					
 					local args = {
 						[1] = shadow,
 						[2] = {
 							["HitTime"] = 0,
 							["Type"] = "Normal",
 							["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-							["VictimCFrame"] = shadow.Torso.CFrame,
+							["VictimCFrame"] = player.Character.Torso.CFrame,
 							["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
 							["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
 							["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
