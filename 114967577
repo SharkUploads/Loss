@@ -319,10 +319,10 @@ local succ, err = pcall(function()
 		end    
 	})
 
-	local keyPressSpeed = 0.1
+	local keyPressSpeed = 0
 	Tab:AddSlider({
 		Name = "Auto Gravity Chamber Speed",
-		Min = 0.1,
+		Min = 0,
 		Max = 1,
 		Default = 0.1,
 		Color = Color3.fromRGB(255,255,255),
@@ -1187,7 +1187,7 @@ local succ, err = pcall(function()
 		end 
 	end)()
 
-
+local count = 0
 	while task.wait() do
 		if isTeleporting == false then
 			if autKey == true then
@@ -1217,10 +1217,58 @@ local succ, err = pcall(function()
 				local evennewStr2, replaced2 = string.gsub(newStr2, "+", " ")
 				print(evennewStr11 .. " Key1")
 				print(evennewStr2 .. " Key2")
-				vim:SendKeyEvent(true, evennewStr11, false, game)
 				task.wait(keyPressSpeed)
+				vim:SendKeyEvent(true, evennewStr11, false, game)
+				task.wait(0.05)
 				vim:SendKeyEvent(true, evennewStr2, false, game)
+				count += 1
+				if count >= 30 and count < 999 then
+					
+
+					count = 999
+					
+					local args = {
+						[1] = "EndTraining"
+					}
+
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					
+					local args = {
+						[1] = "KitchenActivated"
+					}
+
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					
+					task.wait(1.5)
+		
+					local args = {
+						[1] = "KitchenDeactivated"
+					}
+
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+
+					
+					local args = {
+						[1] = "StartTraining"
+					}
+
+					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
+
+					
+					count = 0
+					
+					task.wait()
+					
+				end
 				task.wait(0.1)
+
 
 			end
 
