@@ -1153,10 +1153,13 @@ local succ, err = pcall(function()
 
 					local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
 					
-					local Weld = Instance.new("Weld", player.Character.HumanoidRootPart)
+					if not player.Character.HumanoidRootPart:FindFirstChild("Welder") then
+					player.Character.HumanoidRootPart.CFrame = shadow.HumanoidRootPart.CFrame * CFrame.new(0, 1, 0)
+					local Weld = Instance.new("WeldConstraint", player.Character.HumanoidRootPart)
 					Weld.Name = "Welder"
 					Weld.Part0 = player.Character.HumanoidRootPart
 					Weld.Part1 = shadow.HumanoidRootPart
+					end
 					
 					local args = {
 						[1] = shadow,
@@ -1164,7 +1167,7 @@ local succ, err = pcall(function()
 							["HitTime"] = 0,
 							["Type"] = "Normal",
 							["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-							["VictimCFrame"] = player.Character.Torso.CFrame,
+							["VictimCFrame"] = shadow.Torso.CFrame,
 							["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
 							["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
 							["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
