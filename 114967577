@@ -1152,14 +1152,8 @@ local succ, err = pcall(function()
 				if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
 
 					local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
-					
-					if not player.Character.HumanoidRootPart:FindFirstChild("Welder") then
-					player.Character.HumanoidRootPart.CFrame = shadow.HumanoidRootPart.CFrame * CFrame.new(0, 1, 0)
-					local Weld = Instance.new("WeldConstraint", player.Character.HumanoidRootPart)
-					Weld.Name = "Welder"
-					Weld.Part0 = player.Character.HumanoidRootPart
-					Weld.Part1 = shadow.HumanoidRootPart
-					end
+
+					player.Character.HumanoidRootPart.CFrame = shadow.HumanoidRootPart.CFrame * CFrame.new(0, 0, 1)
 					
 					local args = {
 						[1] = shadow,
@@ -1188,14 +1182,6 @@ local succ, err = pcall(function()
 
 					end
 
-				end
-				
-			else
-				
-				if player.Character.HumanoidRootPart:FindFirstChild("Welder") then
-					
-					player.Character.HumanoidRootPart:FindFirstChild("Welder"):Destroy()
-					
 				end
 				
 			end	
