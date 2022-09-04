@@ -1282,7 +1282,14 @@ local succ, err = pcall(function()
 				
 				if err then
 					
-					print(err)
+					OrionLib:MakeNotification({
+						Name = "Skrillex Hub",
+						Content = "Something gone wrong with ur kill aura restart the script",
+						Image = "rbxassetid://4483345998",
+						Time = 5
+					}) 
+					
+					break
 					
 				end
 			end
