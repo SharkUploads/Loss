@@ -519,7 +519,7 @@ local succ, err = pcall(function()
 	local UltraShadowTrainFarm = false
 	local timer = nil
 	local dropdown3 = nil
-	local timeToNotify = nil
+	local timeToNotify = ""
 	local nextTimeNotifyAt = nil
 	
 	if Settings.WebHook ~= nil then
@@ -1148,7 +1148,7 @@ local succ, err = pcall(function()
 					killauraToggle:Set(false)
 
 				end
-				
+
 				if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
 
 					local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
@@ -1181,7 +1181,7 @@ local succ, err = pcall(function()
 					end
 
 				end
-				
+
 			end	
 
 		end 
@@ -1388,23 +1388,31 @@ local count = 0
 			if isPremium and timer ~= nil then
 				
 				local scripttime=game.Workspace.DistributedGameTime
-				local seconds = scripttime%60
+				local seconds = math.floor(scripttime%60)
 				local minutes = math.floor(scripttime/60%60)
 				local hours = math.floor(scripttime/3600)
 				local tempo = string.format("%.0f:%.0f:%.0f", hours ,minutes, seconds)
+				if minutes <= 10 then
+
+					local ttempo = string.format("%.0f", hours)
+					tempo = ttempo .. ":" .. "0" .. math.floor(scripttime/60%60) .. ":" .. seconds
+					print(tempo)
+
+				end
+				
 				timer:Set(tempo)
 
 				local success, err = pcall(function()
 					
-					if timeToNotify ~= nil then
+					if timeToNotify ~= "" then
 						
 						nextTimeNotifyAt:Set("Next notify: " .. timeToNotify)
 						
 						if tempo >= timeToNotify then
 							
-							timeToNotify = nil
+							timeToNotify = ""
 							nextTimeNotifyAt:Set("0:00:00")
-							
+
 							OrionLib:MakeNotification({
 								Name = "Skrillex Hub",
 								Content = "Your Server Reached: " .. tempo .. "!",
@@ -1432,10 +1440,12 @@ local count = 0
 
 					OrionLib:MakeNotification({
 						Name = "Skrillex Hub",
-						Content = "Something Gone Wrong With Timer",
+						Content = err,
 						Image = "rbxassetid://4483345998",
 						Time = 5
 					}) 
+					
+					break
 
 				end
 				
