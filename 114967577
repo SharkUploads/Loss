@@ -1148,11 +1148,16 @@ local succ, err = pcall(function()
 					killauraToggle:Set(false)
 
 				end
-
+				
 				if game.Workspace:FindFirstChild(player.Name .. "'s Shadow") then
 
 					local shadow = game.Workspace:FindFirstChild(player.Name .. "'s Shadow")
-
+					
+					local Weld = Instance.new("Weld", player.Character.HumanoidRootPart)
+					Weld.Name = "Welder"
+					Weld.Part0 = player.Character.HumanoidRootPart
+					Weld.Part1 = shadow.HumanoidRootPart
+					
 					local args = {
 						[1] = shadow,
 						[2] = {
@@ -1181,7 +1186,15 @@ local succ, err = pcall(function()
 					end
 
 				end
-
+				
+			else
+				
+				if player.Character.HumanoidRootPart:FindFirstChild("Welder") then
+					
+					player.Character.HumanoidRootPart:FindFirstChild("Welder"):Destroy()
+					
+				end
+				
 			end	
 
 		end 
