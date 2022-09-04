@@ -263,7 +263,7 @@ local succ, err = pcall(function()
 	})
 
 	Tab:AddToggle({
-		Name = "Auto Gravity Chamber Key (Does not auto stop)",
+		Name = "Auto Gravity Chamber",
 		Default = false,
 		Callback = function(Value)
 			autKey = Value
