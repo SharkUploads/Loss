@@ -1241,7 +1241,9 @@ local succ, err = pcall(function()
 			end
 
 			if KillAura == true or PlayersKillAura == true then
-
+				
+				local success, err = pcall(function()
+				
 				if ShadowTrainFarm == false then
 
 					task.wait(KillAuraWait)
@@ -1275,6 +1277,13 @@ local succ, err = pcall(function()
 							end       
 						end
 					end
+					end
+				end)
+				
+				if err then
+					
+					print(err)
+					
 				end
 			end
 
