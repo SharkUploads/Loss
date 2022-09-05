@@ -15,7 +15,7 @@ local succ, err = pcall(function()
 		autoDragonBallsServerHop = false,
 		WebHook = nil
 	}
-	
+
 	local Settings
 
 	if not pcall(function() readfile(Name) end) then writefile(Name, game:service'HttpService':JSONEncode(DefaultSettings)) end
@@ -37,7 +37,7 @@ local succ, err = pcall(function()
 	if syn then
 
 		synapse = true
-		
+
 		local OldNameCall 
 		OldNameCall = hookmetamethod(game, "__namecall", function(...) 
 			local Self, Args = (...), ({select(2, ...)})
@@ -186,9 +186,9 @@ local succ, err = pcall(function()
 
 
 	local UIS = game:GetService("UserInputService")
-	
+
 	if Settings.WebHook ~= nil then
-		
+
 		OrionLib:MakeNotification({
 			Name = "Skrillex Hub",
 			Content = "Current Webhook: " .. Settings.WebHook,
@@ -197,7 +197,7 @@ local succ, err = pcall(function()
 		})
 
 	end
-	
+
 	local Tab = Window:MakeTab({
 		Name = "Auto Farm",
 		Icon = "rbxassetid://4483345998",
@@ -269,7 +269,7 @@ local succ, err = pcall(function()
 			autKey = Value
 		end    
 	})
-	
+
 	local KillAuraWait = 0
 	local maxDistance = 15
 	local KillAura = false
@@ -521,22 +521,22 @@ local succ, err = pcall(function()
 	local dropdown3 = nil
 	local timeToNotify = ""
 	local nextTimeNotifyAt = nil
-	
+
 	if Settings.WebHook ~= nil then
-		
+
 		webhook = Settings.WebHook
-		
+
 	end
-	
+
 	function Webhook(message, title)
-		
+
 		print(webhook)
 		if title == nil then
-			
+
 			title = "Skrillex Hub Bot"
-			
+
 		end
-		
+
 		local url =
 			webhook
 		local data = {
@@ -564,7 +564,7 @@ local succ, err = pcall(function()
 		request(abcdef)
 
 	end
-	 
+
 	if isPremium == true then
 
 		local Tab = Window:MakeTab({
@@ -583,7 +583,7 @@ local succ, err = pcall(function()
 
 		Tab:AddSlider({
 			Name = "Fast PL Settings",
-			Min = 0,
+			Min = 0.03,
 			Max = 2,
 			Default = 0,
 			Color = Color3.fromRGB(255,255,255),
@@ -765,39 +765,39 @@ local succ, err = pcall(function()
 
 			end    
 		})
-		
+
 		Tab:AddToggle({
 			Name = "Spectate Player",
 			Default = false,
 			Callback = function(Value)
-				
-				local succ, err = pcall(function()
-				if playerToKill ~= nil or game.Players:FindFirstChild(playerToKill) then
-					
-					if Value == true then
 
-						game.Workspace.Camera.CameraSubject = game.Players:FindFirstChild(playerToKill).Character.Humanoid
+				local succ, err = pcall(function()
+					if playerToKill ~= nil or game.Players:FindFirstChild(playerToKill) then
+
+						if Value == true then
+
+							game.Workspace.Camera.CameraSubject = game.Players:FindFirstChild(playerToKill).Character.Humanoid
+
+						else
+
+							game.Workspace.Camera.CameraSubject = player.Character.Humanoid
+
+						end
 
 					else
 
-						game.Workspace.Camera.CameraSubject = player.Character.Humanoid
-
-					end
-
-				else
-
-					OrionLib:MakeNotification({
-						Name = "Skrillex Hub",
-						Content = "Player: " .. "[" .. playerToKill .. "]" .. " Not Found",
-						Image = "rbxassetid://4483345998",
-						Time = 5
-					})
+						OrionLib:MakeNotification({
+							Name = "Skrillex Hub",
+							Content = "Player: " .. "[" .. playerToKill .. "]" .. " Not Found",
+							Image = "rbxassetid://4483345998",
+							Time = 5
+						})
 
 					end
 				end)
 			end    
 		})
-		
+
 
 		local killPlayer = Tab:AddToggle({
 			Name = "Kill Player",
@@ -913,8 +913,8 @@ local succ, err = pcall(function()
 
 				if dropdown2 == "Webhook" then
 
-				Webhook("Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId, nil)
-					
+					Webhook("Admin joined, User: " .. plr.Name .. ", UserId: " .. plr.UserId, nil)
+
 				elseif dropdown2 == "Kick" then
 
 					player:Kick("Admin Detected")
@@ -976,13 +976,13 @@ local succ, err = pcall(function()
 				end
 			end
 		end
-		
+
 		local Tab = Window:MakeTab({
 			Name = "Paid 3",
 			Icon = "rbxassetid://4483345998",
 			PremiumOnly = false
 		})
-		
+
 		Tab:AddDropdown({
 			Name = "Timer Notifier",
 			Default = "None",
@@ -991,7 +991,7 @@ local succ, err = pcall(function()
 				dropdown3 = Value
 			end   
 		})
-		
+
 		Tab:AddTextbox({
 			Name = "Notify At",
 			Default = "",
@@ -1000,11 +1000,11 @@ local succ, err = pcall(function()
 				timeToNotify = Value
 			end	  
 		})
-		
+
 		timer = Tab:AddLabel("Label")
-		
+
 		nextTimeNotifyAt = Tab:AddLabel("0:00:00")
-		
+
 		Tab:AddTextbox({
 			Name = "Webhook (Only With Webhook Type)",
 			Default = "",
@@ -1022,7 +1022,7 @@ local succ, err = pcall(function()
 				Save()
 			end	  
 		})
-		
+
 		local oldCFrame = nil
 		coroutine.wrap(function()
 			while task.wait() do
@@ -1187,7 +1187,7 @@ local succ, err = pcall(function()
 		end 
 	end)()
 
-local count = 0
+	local count = 0
 	while task.wait() do
 		if isTeleporting == false then
 			if autKey == true then
@@ -1223,16 +1223,16 @@ local count = 0
 				vim:SendKeyEvent(true, evennewStr2, false, game)
 				count += 1
 				if count >= 30 and count < 999 then
-					
+
 
 					count = 999
-					
+
 					local args = {
 						[1] = "EndTraining"
 					}
 
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
-					
+
 					local args = {
 						[1] = "KitchenActivated"
 					}
@@ -1241,9 +1241,9 @@ local count = 0
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
-					
+
 					task.wait(1.5)
-		
+
 					local args = {
 						[1] = "KitchenDeactivated"
 					}
@@ -1254,18 +1254,18 @@ local count = 0
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
 
-					
+
 					local args = {
 						[1] = "StartTraining"
 					}
 
 					game:GetService("ReplicatedStorage").RemoteEvents:FireServer(unpack(args))
 
-					
+
 					count = 0
-					
+
 					task.wait()
-					
+
 				end
 				task.wait(0.1)
 
@@ -1289,56 +1289,56 @@ local count = 0
 			end
 
 			if KillAura == true or PlayersKillAura == true then
-				
+
 				local success, err = pcall(function()
-				
-				if ShadowTrainFarm == false then
 
-					task.wait(KillAuraWait)
+					if ShadowTrainFarm == false then
 
-				end
+						task.wait(KillAuraWait)
 
-				for _, v in pairs(game.Workspace:GetChildren()) do
+					end
 
-					if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
-						if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
-							if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
-								local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
-								if distance <= maxDistance then
-									local args = {
-										[1] = v,
-										[2] = {
-											["HitTime"] = 0,
-											["Type"] = "Normal",
-											["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
-											["VictimCFrame"] = v.HumanoidRootPart.CFrame,
-											["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
-											["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
-											["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
-											["Damage"] = 0
+					for _, v in pairs(game.Workspace:GetChildren()) do
+
+						if v:FindFirstChild("HumanoidRootPart") or v:FindFirstChild("Torso") then
+							if v.Name ~= player.Name and v:FindFirstChild("Humanoid") and v:FindFirstChild("Humanoid").Health >= 0 then
+								if (game.Players:FindFirstChild(v.Name) and PlayersKillAura == true) or (not game.Players:FindFirstChild(v.Name) and PlayersKillAura == false) then	
+									local distance = (v:FindFirstChild("HumanoidRootPart").Position - player.Character.HumanoidRootPart.Position).magnitude
+									if distance <= maxDistance then
+										local args = {
+											[1] = v,
+											[2] = {
+												["HitTime"] = 0,
+												["Type"] = "Normal",
+												["HitEffect"] = game:GetService("ReplicatedStorage").Resources.OtherEffects.NormalHitEffect2,
+												["VictimCFrame"] = v.HumanoidRootPart.CFrame,
+												["HurtAnimation"] = game:GetService("ReplicatedStorage").Resources.Animations.HurtAnimations.Hurt2,
+												["Velocity"] = Vector3.new(0.01, 0.01, 0.01) --[[Vector3]],
+												["Sound"] = game:GetService("ReplicatedStorage").Resources.Sounds.Combat.NormalKick,
+												["Damage"] = 0
+											}
 										}
-									}
 
-									game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
+										game:GetService("ReplicatedStorage").Remotes.Damage4:InvokeServer(unpack(args))
 
-								end
-							end       
+									end
+								end       
+							end
 						end
 					end
-					end
 				end)
-				
+
 				if err then
-					
+
 					OrionLib:MakeNotification({
 						Name = "Skrillex Hub",
 						Content = "Something gone wrong with ur kill aura restart the script",
 						Image = "rbxassetid://4483345998",
 						Time = 5
 					}) 
-					
+
 					break
-					
+
 				end
 			end
 
@@ -1384,9 +1384,9 @@ local count = 0
 
 				end
 			end
-			
+
 			if isPremium and timer ~= nil then
-				
+
 				local scripttime=game.Workspace.DistributedGameTime
 				local seconds = math.floor(scripttime%60)
 				local minutes = math.floor(scripttime/60%60)
@@ -1399,17 +1399,17 @@ local count = 0
 					print(tempo)
 
 				end
-				
+
 				timer:Set(tempo)
 
 				local success, err = pcall(function()
-					
+
 					if timeToNotify ~= "" then
-						
+
 						nextTimeNotifyAt:Set("Next notify: " .. timeToNotify)
-						
+
 						if tempo >= timeToNotify then
-							
+
 							timeToNotify = ""
 							nextTimeNotifyAt:Set("0:00:00")
 
@@ -1419,23 +1419,23 @@ local count = 0
 								Image = "rbxassetid://4483345998",
 								Time = 5
 							}) 
-							
+
 							if dropdown3 == "Webhook" then
-						
-							Webhook("Your Server Reached: " .. tempo .. "!", nil)
-								
+
+								Webhook("Your Server Reached: " .. tempo .. "!", nil)
+
 							else
-								
+
 								local audio = Instance.new("Sound", game.Workspace)
 								audio.SoundId = "rbxassetid://835068435"
 								audio.Volume = 10
 								audio:Play()
-								
+
 							end	
+						end
 					end
-				end
 				end)
-				
+
 				if err then
 
 					OrionLib:MakeNotification({
@@ -1444,11 +1444,11 @@ local count = 0
 						Image = "rbxassetid://4483345998",
 						Time = 5
 					}) 
-					
+
 					break
 
 				end
-				
+
 			end
 
 		else
@@ -1457,5 +1457,5 @@ local count = 0
 
 		end
 	end
-	
+
 end)
