@@ -1392,7 +1392,8 @@ local succ, err = pcall(function()
 				local minutes = math.floor(scripttime/60%60)
 				local hours = math.floor(scripttime/3600)
 				local tempo = string.format("%.0f:%.0f:%.0f", hours ,minutes, seconds)
-				if minutes <= 10 then
+				
+				if minutes < 10 then
 
 					local ttempo = string.format("%.0f", hours)
 					tempo = ttempo .. ":" .. "0" .. math.floor(scripttime/60%60) .. ":" .. seconds
