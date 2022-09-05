@@ -214,7 +214,7 @@ local succ, err = pcall(function()
 	if isPremium == false then
 
 		local PLFarm = Tab:AddToggle({
-			Name = "PL Farm",
+			Name = "PL Farm (High ban chance)",
 			Default = false,
 			Callback = function(Value)
 				local Pos1 = player.Character.HumanoidRootPart.Position.Y
@@ -582,7 +582,7 @@ local succ, err = pcall(function()
 		})
 
 		Tab:AddSlider({
-			Name = "Fast PL Settings",
+			Name = "Fast PL Settings (High ban chance please dont use)",
 			Min = 0.05,
 			Max = 2,
 			Default = 0,
