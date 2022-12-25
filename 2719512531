@@ -16,7 +16,9 @@ local DefaultSettings = {
 
 	WebHook = nil,
 	BaseTransparency = 0.4,
-
+	AutoPrestige = false,
+	Auto050 = false,
+	
 }
 
 local Settings
@@ -667,33 +669,42 @@ coroutine.wrap(function()
 
 				game:GetService("ReplicatedStorage").Remotes.Purchase:FireServer(unpack(args))
 
-				local text = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Title.Text
-				local yes = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Yes
-				local no = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.No
-				local newText = string.gsub(text, "You just rolled ", "")
-				newText = string.gsub(newText, ". Do you accept it?", "")
-				newText = string.gsub(newText, "?", "")
-				local Found = table.find(choosenSecondaries, newText)
+				for _, v in pairs(choosenSecondaries) do
 
-				if Found then
+					local text = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Title.Text
+					local yes = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Yes
+					local no = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.No
+					local newText = string.gsub(text, "You just rolled ", "")
+					newText = string.gsub(newText, ". Do you accept it?", "")
+					newText = string.gsub(newText, "?", "")
 
 					autoSecondary = false
 
 					task.wait(1)
 
-					game.ReplicatedStorage.Remotes.ConfirmRaceChange:FireServer("Yes");
+					if newText == v then
 
-					return
+						autoSecondary = false
 
+						for i,v in pairs(getconnections(yes.MouseButton1Click)) do
+							v:Fire()
+						end
+
+						return
+
+					else
+
+						task.wait(0.5)
+
+						autoSecondary = true
+
+						for i,v in pairs(getconnections(no.MouseButton1Click)) do
+							v:Fire()
+						end
+
+					end
 				end
-
-				task.wait(1)
-
-				game.ReplicatedStorage.Remotes.ConfirmRaceChange:FireServer("No");
-
-
 			end
-
 		end)
 	end
 
@@ -751,10 +762,6 @@ function Webhook(message, title)
 
 end
 
-local ASecondary = Section:CreateToggle('AutoSecondary', false, Color3.fromRGB(0, 125, 255), 0.1, function(Value)
-	autoSecondary = Value
-end)
-
 if isPremium == true then
 
 	local Toggle = Section:CreateToggle('Auto Mob', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
@@ -805,6 +812,12 @@ if isPremium == true then
 
 
 		end
+	end)
+	
+	local autoLv050 = Section:CreateToggle('Auto Level 50', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+		Settings.Auto50 = true
+		Save()
+		game:GetService("TeleportService"):Teleport(8934886191, player)
 	end)
 
 	for _, v in pairs(game.Workspace.Living:GetChildren()) do
@@ -1098,7 +1111,6 @@ local ASecondary = PaidAutoRollTab:CreateToggle('Auto Secondary', false, Color3.
 end)
 --]]
 
-
 local SettingsTab = Window:CreateTab('Settings', false, 'rbxassetid://3926305904', Vector2.new(484, 44), Vector2.new(36, 36))
 
 local SectionSettings = SettingsTab:CreateSection('General')
@@ -1158,3 +1170,64 @@ local Button = Section3:CreateButton('Join Discord', function()
 end)
 
 Paragraph = Section3:CreateParagraph('Creators', 'Made by Skrillex#6300 and Anima#1906')
+
+task.wait(5)
+
+if Settings.Auto050 == true then
+	
+	Settings.Auto050 = false
+	
+	Save()
+	
+	local character = player.Character or player.CharacterAdded:Wait()
+	local root = character:WaitForChild("HumanoidRootPart")
+	
+	local args = {
+		[1] = "The Lost Dog"
+	}
+
+	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
+	
+	local dog
+
+	repeat
+
+		dog = game:GetService("Workspace").SpawnedNPCs["The Dog"]
+
+		if dog.Player.Value ~= player.Name then
+
+			dog:Destroy()
+
+		end
+
+	until dog.Player.Value == player.Name
+
+	root.CFrame = dog.HumanoidRootPart.CFrame
+	task.wait(0.5)
+	fireproximityprompt(dog.ProximityPrompt, 99999)
+
+	root.CFrame = game:GetService("Workspace").NPCs.XenonBlxde.HumanoidRootPart.CFrame
+	
+	task.wait(0.5)
+	
+	local args = {
+		[1] = "The Pond Visit"
+	}
+
+	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
+	
+	root.CFrame = CFrame.new(1186.91113, 18.7000008, 48.9161949, -0.130255789, -4.39744738e-08, -0.99148041, 5.96333152e-08, 1, -5.21866674e-08, 0.99148041, -6.59228832e-08, -0.130255789)
+	
+	task.wait(0.5)
+	
+	local args = {
+		[1] = "Pouch Delivery"
+	}
+	
+	fireclickdetector(game:GetService("Workspace").NPCs.DonFlacko.ClickDetector)
+	
+	task.wait(1)
+	
+	player:Kick("Everything Done, Rejoin Now")
+	
+end
