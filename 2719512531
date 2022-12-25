@@ -1190,7 +1190,9 @@ if Settings.Auto50 == true then
 
 	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
 	
-	local dog
+	task.wait(1)
+	
+	local dog = game:GetService("Workspace").SpawnedNPCs["The Dog"]
 
 	repeat
 
