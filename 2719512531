@@ -1173,11 +1173,13 @@ Paragraph = Section3:CreateParagraph('Creators', 'Made by Skrillex#6300 and Anim
 
 task.wait(5)
 
-if Settings.Auto050 == true then
+if Settings.Auto50 == true then
 	
-	Settings.Auto050 = false
+	Settings.Auto50 = false
 	
 	Save()
+	
+	task.wait(1)
 	
 	local character = player.Character or player.CharacterAdded:Wait()
 	local root = character:WaitForChild("HumanoidRootPart")
