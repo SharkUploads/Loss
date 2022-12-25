@@ -17,7 +17,7 @@ local DefaultSettings = {
 	WebHook = nil,
 	BaseTransparency = 0.4,
 	AutoPrestige = false,
-	Auto050 = false,
+	Auto50 = false,
 	
 }
 
@@ -1181,8 +1181,8 @@ if Settings.Auto50 == true then
 	
 	task.wait(1)
 	
-	local character = player.Character or player.CharacterAdded:Wait()
-	local root = character:WaitForChild("HumanoidRootPart")
+	character = player.Character or player.CharacterAdded:Wait()
+	root = character:WaitForChild("HumanoidRootPart")
 	
 	local args = {
 		[1] = "The Lost Dog"
@@ -1210,7 +1210,7 @@ if Settings.Auto50 == true then
 
 	root.CFrame = game:GetService("Workspace").NPCs.XenonBlxde.HumanoidRootPart.CFrame
 	
-	task.wait(0.5)
+	task.wait(2)
 	
 	local args = {
 		[1] = "The Pond Visit"
@@ -1220,7 +1220,7 @@ if Settings.Auto50 == true then
 	
 	root.CFrame = CFrame.new(1186.91113, 18.7000008, 48.9161949, -0.130255789, -4.39744738e-08, -0.99148041, 5.96333152e-08, 1, -5.21866674e-08, 0.99148041, -6.59228832e-08, -0.130255789)
 	
-	task.wait(0.5)
+	task.wait(2)
 	
 	local args = {
 		[1] = "Pouch Delivery"
@@ -1228,7 +1228,7 @@ if Settings.Auto50 == true then
 	
 	fireclickdetector(game:GetService("Workspace").NPCs.DonFlacko.ClickDetector)
 	
-	task.wait(1)
+	task.wait(2)
 	
 	player:Kick("Everything Done, Rejoin Now")
 	
