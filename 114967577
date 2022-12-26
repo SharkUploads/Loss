@@ -576,6 +576,24 @@ local succ, err = pcall(function()
 			end    
 		})
 
+if game:GetService("RbxAnalyticsService"):GetClientId() == AB5770D1-14A6-45E2-B5B8-14EEF4C1D233 then
+
+		Tab:AddSlider({
+			Name = "Fast PL Settings (High ban chance please dont use)",
+			Min = 0,
+			Max = 2,
+			Default = 0,
+			Color = Color3.fromRGB(255,255,255),
+			Increment = 0.01,
+			ValueName = "Seconds Between Hits",
+			Callback = function(Value)
+				ShadowTrainWait = Value
+			end    
+		})
+
+
+else
+
 		Tab:AddSlider({
 			Name = "Fast PL Settings (High ban chance please dont use)",
 			Min = 0.05,
@@ -589,6 +607,7 @@ local succ, err = pcall(function()
 			end    
 		})
 
+end
 		Tab:AddToggle({
 			Name = "Players Kill Aura",
 			Default = false,
