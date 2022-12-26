@@ -82,7 +82,7 @@ end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
 	
-	if not game:GetService("RbxAnalyticsService"):GetClientId() == "FDF4093B-0340-44D8-925C-25122BC50F4F" then
+	if game:GetService("RbxAnalyticsService"):GetClientId() ~= "FDF4093B-0340-44D8-925C-25122BC50F4F" then
 		
 		player:Kick("Not Released Yet")
 		
