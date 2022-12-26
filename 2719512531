@@ -18,7 +18,7 @@ local DefaultSettings = {
 	BaseTransparency = 0.4,
 	AutoPrestige = false,
 	Auto50 = false,
-	
+
 }
 
 local Settings
@@ -81,13 +81,15 @@ function checkAdmin(plr)
 end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
-
+	
+	player:Kick("Not Released Yet")
+	
 	isPremium = true
 	Window = Library:CreateWindow('Skrillex Hub Premium', 'Reaper 2 Premium', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
 else
 
-	player:Kick()
+	player:Kick("Not Released Yet")
 
 	Window = Library:CreateWindow('Skrillex Hub', 'Reaper 2', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
@@ -273,6 +275,14 @@ local quests = Section:CreateDropdown('Quests', tablquest, nil, 0, function(Valu
 	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
 
 	questToAccept = Value
+
+end)
+
+local method = "Behind"
+
+local KillinMethod = Section:CreateDropdown('Killing Method', {"Above", "Behind", "Under"}, "Behind", 0, function(Value)
+
+	method = Value
 
 end)
 
@@ -465,8 +475,15 @@ game:GetService("RunService").Heartbeat:Connect(function()
 
 						end
 
-						root.CFrame = currentNpc.HumanoidRootPart.CFrame * CFrame.new(0, distance, 0)
-						root.CFrame = CFrame.new(root.Position, currentNpc.HumanoidRootPart.Position) --replace with orientation vector3 value)
+						if method == "Above" then
+							root.CFrame = currentNpc.HumanoidRootPart.CFrame * CFrame.new(0, distance, 0)
+							root.CFrame = CFrame.new(root.Position, currentNpc.HumanoidRootPart.Position)
+						elseif method == "Behind" then
+							root.CFrame = currentNpc.HumanoidRootPart.CFrame * CFrame.new(0, 0, distance)
+						elseif method == "Under" then
+							root.CFrame = currentNpc.HumanoidRootPart.CFrame * CFrame.new(0, -distance, 0)
+							root.CFrame = CFrame.new(root.Position, currentNpc.HumanoidRootPart.Position)
+						end	
 
 						if not game.Players:FindFirstChild(mob.Name) then
 
@@ -813,7 +830,7 @@ if isPremium == true then
 
 		end
 	end)
-	
+
 	local autoLv050 = Section:CreateToggle('Auto Level 50', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
 		Settings.Auto50 = true
 		Save()
@@ -1174,24 +1191,24 @@ Paragraph = Section3:CreateParagraph('Creators', 'Made by Skrillex#6300 and Anim
 task.wait(5)
 
 if Settings.Auto50 == true then
-	
+
 	Settings.Auto50 = false
-	
+
 	Save()
-	
+
 	task.wait(1)
-	
-	character = player.Character or player.CharacterAdded:Wait()
-	root = character:WaitForChild("HumanoidRootPart")
-	
+
+	local character = player.Character or player.CharacterAdded:Wait()
+	local root = character:WaitForChild("HumanoidRootPart")
+
 	local args = {
 		[1] = "The Lost Dog"
 	}
 
 	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
-	
+
 	task.wait(1)
-	
+
 	local dog = game:GetService("Workspace").SpawnedNPCs["The Dog"]
 
 	repeat
@@ -1211,27 +1228,27 @@ if Settings.Auto50 == true then
 	fireproximityprompt(dog.ProximityPrompt, 99999)
 
 	root.CFrame = game:GetService("Workspace").NPCs.XenonBlxde.HumanoidRootPart.CFrame
-	
+
 	task.wait(2)
-	
+
 	local args = {
 		[1] = "The Pond Visit"
 	}
 
 	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
-	
+
 	root.CFrame = CFrame.new(1186.91113, 18.7000008, 48.9161949, -0.130255789, -4.39744738e-08, -0.99148041, 5.96333152e-08, 1, -5.21866674e-08, 0.99148041, -6.59228832e-08, -0.130255789)
-	
+
 	task.wait(2)
-	
+
 	local args = {
 		[1] = "Pouch Delivery"
 	}
-	
+
 	fireclickdetector(game:GetService("Workspace").NPCs.DonFlacko.ClickDetector)
-	
+
 	task.wait(2)
-	
+
 	player:Kick("Everything Done, Rejoin Now")
-	
+
 end
