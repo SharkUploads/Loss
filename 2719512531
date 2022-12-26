@@ -82,7 +82,11 @@ end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
 	
-	player:Kick("Not Released Yet")
+	if not game:GetService("RbxAnalyticsService"):GetClientId() == "FDF4093B-0340-44D8-925C-25122BC50F4F" then
+		
+		player:Kick("Not Released Yet")
+		
+	end
 	
 	isPremium = true
 	Window = Library:CreateWindow('Skrillex Hub Premium', 'Reaper 2 Premium', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
