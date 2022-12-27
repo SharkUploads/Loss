@@ -1267,7 +1267,7 @@ local SectionSettings = SettingsTab:CreateSection('General')
 
 local isClosed = false
 
-local Keybind1 = SectionSettings:CreateKeybind('Key To Toggle UI', Settings.CloseUI, function()
+local Keybind1 = SectionSettings:CreateKeybind('Key To Toggle UI', "LeftControl", function()
 	Library:ToggleUI()
 end)
 
