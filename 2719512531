@@ -18,6 +18,12 @@ local DefaultSettings = {
 	BaseTransparency = 0.4,
 	AutoPrestige = false,
 	Auto50 = false,
+	AutoRun = false,
+	SafeFarm = false,
+	Distance = 5,
+	Mode = "",
+	LowHp = "",
+	Method = "Behind",
 
 }
 
@@ -82,12 +88,6 @@ end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
 	
-	if game:GetService("RbxAnalyticsService"):GetClientId() ~= "FDF4093B-0340-44D8-925C-25122BC50F4F" then
-		
-		player:Kick("Not Released Yet")
-		
-	end
-	
 	isPremium = true
 	Window = Library:CreateWindow('Skrillex Hub Premium', 'Reaper 2 Premium', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
@@ -98,12 +98,6 @@ else
 	Window = Library:CreateWindow('Skrillex Hub', 'Reaper 2', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
 end
-
-	if game:GetService("RbxAnalyticsService"):GetClientId() ~= "FDF4093B-0340-44D8-925C-25122BC50F4F" then
-		
-		player:Kick("Not Released Yet")
-		
-	end
 
 local players = game.Players
 
@@ -138,6 +132,12 @@ if Settings.WebHook ~= nil then
 
 end	
 
+if Settings.AutoRun == true and isPremium then
+
+	Library:CreateNotification('Skrillex Hub', 'Auto Run Active', 2.5)
+
+end
+
 if isPremium == false then
 
 
@@ -160,7 +160,33 @@ local choosingWeapon = false
 local nonWeapon = {}
 local foundWeapon = nil
 local autoChooseQuest = false
-local distance = 5
+local distance = Settings.Distance
+local tablquest = {}
+local questToAccept = nil
+local EspActivated = false
+local EspClicked = false
+local autoQuest = false
+local AutoRun = Settings.AutoRun
+local skillsTable = {}
+local aQuest
+local hitCount = 0
+local mode = Settings.Mode
+local lowHp = Settings.LowHp
+local SafeFarm = Settings.SafeFarm
+local isHoldingW = false
+local currentNpc = nil
+local autoSecondary = false
+local choosenSecondaries = {}
+local hasFoundSecondary = false
+local resetAfterMode = false
+local justSpawned = false
+local method = Settings.Method
+
+if Settings.LowHp == "" then
+
+	lowHp = hum.MaxHealth * 0.3
+
+end
 
 if isPremium == false then
 
@@ -206,6 +232,8 @@ if isPremium == false then
 
 	local Slider = Section:CreateSlider('Distance', 1, 15, 5, Color3.fromRGB(0, 125, 255), function(Value)
 		distance = Value
+		Settings.Distance = distance
+		Save()
 	end)
 
 	local Toggle = Section:CreateToggle('Safe Place', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
@@ -242,115 +270,112 @@ local Toggle = Section:CreateToggle('Auto Equip', false, Color3.fromRGB(0, 125, 
 
 	autoEquip = Value
 
-	for _, v in pairs(character:GetChildren()) do
+	if Value == true then
 
-		if not table.find(nonWeapon, v.Name) then
+		for _, v in pairs(character:GetChildren()) do
 
-			table.insert(nonWeapon, v.Name)
+			if not table.find(nonWeapon, v.Name) then
 
-			foundWeapon = v.Name
+				table.insert(nonWeapon, v.Name)
 
-		end
-	end
+				foundWeapon = v.Name
 
-	Library:CreatePrompt('TwoButton', 'Is this your weapon?', foundWeapon, {
-		'No',
-		function()
-			choosingWeapon = true
-		end,
-		'Yes',
-		function()
-			choosenWeapon = foundWeapon
+			end
 		end
 
-	})
+		Library:CreatePrompt('TwoButton', 'Is this your weapon?', foundWeapon, {
+			'No',
+			function()
+				choosingWeapon = true
+			end,
+			'Yes',
+			function()
+				choosenWeapon = foundWeapon
+			end
 
+		})
+
+	end
 end)
 
-local tablquest = {}
-local questToAccept = nil
-local quests = Section:CreateDropdown('Quests', tablquest, nil, 0, function(Value)
+if isPremium then
+	local quests = Section:CreateDropdown('Quests', tablquest, nil, 0, function(Value)
 
-	if Value == nil then
+		if Value == nil then
 
-		return
+			return
+
+		end
+
+		local args = {
+			[1] = Value,
+			[2] = workspace.NPCs:FindFirstChild(Value)
+		}
+
+		game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
+
+		questToAccept = Value
+
+	end)
+
+	local Toggle = Section:CreateToggle('Auto Accept Quest', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+		autoChooseQuest = Value
+	end)
+
+	for _, v in pairs(game:GetService("Workspace").NPCs:GetChildren()) do
+
+		if not table.find(tablquest, v.Name) and not game.Players:FindFirstChild(v.Name) and v:FindFirstChild("Dialogue") then
+
+			for _, e in pairs(v.Dialogue:GetDescendants()) do
+
+				if e.Name == "Quest" then
+
+					if not table.find(tablquest, v.Name) then
+
+						table.insert(tablquest, e.Value)
+
+					end
+				end
+
+			end
+		end
 
 	end
 
-	local args = {
-		[1] = Value,
-		[2] = workspace.NPCs:FindFirstChild(Value)
-	}
+	quests:UpdateDropdown(tablquest)
 
-	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
-
-	questToAccept = Value
-
-end)
-
-local method = "Behind"
+end
 
 local KillinMethod = Section:CreateDropdown('Killing Method', {"Above", "Behind", "Under"}, "Behind", 0, function(Value)
 
 	method = Value
+	Settings.Method = method
+	Save()
 
 end)
 
-local Toggle = Section:CreateToggle('Auto Accept Quest', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
-	autoChooseQuest = Value
-end)
 
-for _, v in pairs(game:GetService("Workspace").NPCs:GetChildren()) do
-
-	if not table.find(tablquest, v.Name) and not game.Players:FindFirstChild(v.Name) and v:FindFirstChild("Dialogue") then
-
-		for _, e in pairs(v.Dialogue:GetDescendants()) do
-
-			if e.Name == "Quest" then
-
-				if not table.find(tablquest, v.Name) then
-
-					table.insert(tablquest, e.Value)
-
-				end
+UIS.InputBegan:Connect(function(key, typing)
+	if key.KeyCode == Enum.KeyCode.W then
+		if Settings.AutoRun and isPremium then
+			if isHoldingW == false then
+				isHoldingW = true
+				vm:SendKeyEvent(true, "W", false, game)
 			end
-
 		end
 	end
-
-end
-
-quests:UpdateDropdown(tablquest)
-
-local EspActivated = false
-local EspClicked = false
-local autoQuest = false
-local AutoRun = false
-local skillsTable = {}
-local aQuest
-local hitCount = 0
-local mode
-local lowHp
-
-local mouse = player:GetMouse()
-local isHoldingW = false
-
-mouse.KeyDown:connect(function(key)
-	if key == "w" then
-		isHoldingW = true
-	end
 end)
 
-mouse.KeyUp:connect(function(key)
-	if key == "w" then
-		isHoldingW = false
+UIS.InputEnded:Connect(function(key, typing)
+	if key.KeyCode == Enum.KeyCode.W then
+		if Settings.AutoRun and isPremium then
+			if isHoldingW == true then
+				isHoldingW = false
+				vm:SendKeyEvent(false, "W", false, game)
+			end
+		end
 	end
 end)
-
-local currentNpc = nil
-local autoSecondary = false
-local choosenSecondaries = {}
-local hasFoundSecondary = false
 
 game:GetService("RunService").Heartbeat:Connect(function()
 
@@ -360,19 +385,7 @@ game:GetService("RunService").Heartbeat:Connect(function()
 		local root = character.HumanoidRootPart
 		local hum = character.Humanoid
 
-		if AutoRun == true then
-
-			if isHoldingW == true then
-
-				if game.Players.LocalPlayer.Character.Humanoid.WalkSpeed <= 20 then
-
-					vm:SendKeyEvent(true, "W", false, game)
-
-				end
-			end
-		end	
-
-		if questToAccept then
+		if questToAccept and isPremium then
 
 			if autoChooseQuest == false then
 
@@ -451,19 +464,30 @@ game:GetService("RunService").Heartbeat:Connect(function()
 
 		end
 
-		if hitCount < 4 then
+		if resetAfterMode and isPremium then
 
-			if lowHp and mode then
+			if player:FindFirstChild("CoolDowns") then
 
-				if character.Humanoid.Health <= lowHp then
+				if player.Cooldowns:FindFirstChild("Transform") then
 
-					autoFarm = false
-
-					player.Character.HumanoidRootPart.CFrame = CFrame.new(math.random(1000, 10000), math.random(10000, 20000), math.random(1000, 10000))
+					character.Humanoid.Health = 0
 
 				end
 
-			end	
+			end
+
+		end
+
+		if lowHp and string.len(mode) > 2 and isPremium then
+			if character.Humanoid.Health <= lowHp then
+
+				game.Players:Chat(mode)
+
+			end
+
+		end	
+
+		if hitCount < 4 then
 
 			if autoFarm and choosenMob and player.Character then
 
@@ -583,6 +607,13 @@ game:GetService("RunService").Heartbeat:Connect(function()
 
 		end
 	end)
+
+	if err then
+
+		print(err)
+
+	end
+
 end)
 
 coroutine.wrap(function()
@@ -655,13 +686,72 @@ coroutine.wrap(function()
 
 			if autoFarm or autoQuest then
 
-				hitCount += 1
+				if isPremium == true and SafeFarm == true then
+
+					hitCount += 1
+
+				end
+			end
+
+		end)
+	end
+
+end)()
+
+coroutine.wrap(function()
+
+	while task.wait(1) do
+
+		local succ, err = pcall(function()
+
+			if autoSecondary then
+
+				local args = {
+					[1] = "Roll Secondary"
+				}
+
+				game:GetService("ReplicatedStorage").Remotes.Purchase:FireServer(unpack(args))
+
+				task.wait(1)
+
+				for _, v in pairs(choosenSecondaries) do
+
+					local text = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Title.Text
+					local yes = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Yes
+					local no = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.No
+					local newText = string.gsub(text, "You just rolled ", "")
+					newText = string.gsub(newText, ". Do you accept it?", "")
+					newText = string.gsub(newText, "?", "")
+
+					if v == newText then
+
+						autoSecondary = false
+
+						local args = {
+							[1] = "Yes"
+						}
+
+						game:GetService("ReplicatedStorage").Remotes.ConfirmRaceChange:FireServer(unpack(args))
+
+					end
+				end
+
+				task.wait(1)
+
+				if autoSecondary == true then
+
+					for i,v in pairs(getconnections(no.Activated)) do
+						v:Fire()
+					end
+				end
 
 			end
 
-			if choosenWeapon then
+			if choosenWeapon and justSpawned == false then
 
 				if not character:FindFirstChild(choosenWeapon) then
+
+					print(choosenWeapon)
 
 					if autoEquip == true then
 
@@ -677,65 +767,22 @@ coroutine.wrap(function()
 					end
 				end
 			end
+
 		end)
 	end
 
 end)()
 
-coroutine.wrap(function()
+player.CharacterAdded:Connect(function(Char)
 
-	while task.wait(2.5) do
+	character = Char
+	justSpawned = true
 
-		local succ, err = pcall(function()
+	task.wait(3)
 
-			if autoSecondary then
+	justSpawned = false
 
-				local args = {
-					[1] = "Roll Secondary"
-				}
-
-				game:GetService("ReplicatedStorage").Remotes.Purchase:FireServer(unpack(args))
-
-				for _, v in pairs(choosenSecondaries) do
-
-					local text = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Title.Text
-					local yes = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.Yes
-					local no = game.Players.LocalPlayer.PlayerGui.ConfirmRaceChange.Frame.No
-					local newText = string.gsub(text, "You just rolled ", "")
-					newText = string.gsub(newText, ". Do you accept it?", "")
-					newText = string.gsub(newText, "?", "")
-
-					autoSecondary = false
-
-					task.wait(1)
-
-					if newText == v then
-
-						autoSecondary = false
-
-						for i,v in pairs(getconnections(yes.MouseButton1Click)) do
-							v:Fire()
-						end
-
-						return
-
-					else
-
-						task.wait(0.5)
-
-						autoSecondary = true
-
-						for i,v in pairs(getconnections(no.MouseButton1Click)) do
-							v:Fire()
-						end
-
-					end
-				end
-			end
-		end)
-	end
-
-end)()
+end)
 
 local isTeleporting = false
 
@@ -795,6 +842,12 @@ if isPremium == true then
 		autoFarm = Value
 	end)
 
+	local Toggle = Section:CreateToggle('Safe Farm', Settings.SafeFarm, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+		SafeFarm = Value
+		Settings.SafeFarm = SafeFarm
+		Save()
+	end)
+
 	aQuest = Section:CreateToggle('Auto Quest', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
 		autoQuest = Value
 		autoFarm = Value
@@ -809,8 +862,10 @@ if isPremium == true then
 		choosenMob = Value
 	end)
 
-	local Slider = Section:CreateSlider('Distance', 1, 15, 5, Color3.fromRGB(0, 125, 255), function(Value)
+	local Slider = Section:CreateSlider('Distance', 1, 15, Settings.Distance, Color3.fromRGB(0, 125, 255), function(Value)
 		distance = Value
+		Settings.Distance = distance
+		Save()
 	end)
 
 	local Toggle = Section:CreateToggle('Safe Place', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
@@ -879,8 +934,9 @@ if isPremium == true then
 	local MiscTab = Misc:CreateSection('Section')
 
 
-	local ARun = MiscTab:CreateToggle('Auto Run', false, Color3.fromRGB(0, 125, 255), 0.1, function(Value)
-		AutoRun = Value
+	local ARun = MiscTab:CreateToggle('Auto Run', Settings.AutoRun, Color3.fromRGB(0, 125, 255), 0.1, function(Value)
+		Settings.AutoRun = Value
+		Save()
 	end)
 
 
@@ -930,6 +986,12 @@ if isPremium == true then
 
 	end
 
+	local tpSoulSociety = Section2:CreateButton('Soul Society', function()
+
+		game:GetService("TeleportService"):Teleport(8934886191, player)
+
+	end)
+
 	local Input = Section2:CreateTextbox('Webhook (Only With Webhook Type)', '...', function(Value)
 		Library:CreatePrompt('OneButton', 'Skrillex Hub', 'Sent Test Webhook', {
 			'Alright',
@@ -944,14 +1006,24 @@ if isPremium == true then
 
 	end)
 
-	local Input = Section2:CreateTextbox('Mode When Low Hp', 'Mode Name...', function(Value)
+	local Input = Section2:CreateTextbox('Mode When Low Hp', Settings.Mode, function(Value)
 
 		mode = Value
+		Settings.Mode = mode
+		Save()
 
 	end)
 
-	local Slider99 = Section:CreateSlider('Hp For Mode', 1, hum.MaxHealth, hum.MaxHealth * 0.3, Color3.fromRGB(0, 125, 255), function(Value)
+	local Slider99 = Section2:CreateSlider('Hp For Mode', 1, player.Character.Humanoid.MaxHealth, lowHp, Color3.fromRGB(0, 125, 255), function(Value)
 		lowHp = Value
+		Settings.LowHp = lowHp
+		Save()
+	end)
+
+	local Toggle = Section2:CreateToggle('Reset After Mode', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+
+		resetAfterMode = Value
+
 	end)
 
 	local Dropdown = Section2:CreateDropdown('Admin Detect', {'Nothing', 'Kick', 'Notify', 'Rejoin'}, 'Kick', 0.25, function(Value)
@@ -1089,7 +1161,7 @@ if isPremium == true then
 
 		for _, v in pairs(game.Players:GetChildren()) do
 
-			table.insert(playerstable, v.Name)
+			table.remove(playerstable, table.find(playerstable, v.Name))
 
 		end
 
@@ -1099,7 +1171,7 @@ if isPremium == true then
 
 end
 
-local PaidAutoRoll = Window:CreateTab('Auto Roll', false, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
+local PaidAutoRoll = Window:CreateTab('Shop', false, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
 
 local PaidAutoRollTab = PaidAutoRoll:CreateSection('Section')
 
@@ -1110,6 +1182,48 @@ local RollSecondary = PaidAutoRollTab:CreateButton('Roll Secondary', function()
 	}
 
 	game:GetService("ReplicatedStorage").Remotes.Purchase:FireServer(unpack(args))
+
+end)
+
+local RollRace = PaidAutoRollTab:CreateButton('Roll Race', function()
+
+	local args = {
+		[1] = "Race Roll"
+	}
+
+	game:GetService("ReplicatedStorage").Remotes.Purchase:FireServer(unpack(args))
+
+end)
+
+local Premium = PaidAutoRollTab:CreateButton('Buy Premium', function()
+
+
+	setclipboard([[_G.DiscordUser = "DiscordHere"
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/SharkUploads/Whitelister/main/GamepassWhitelister')))()]])
+
+	Library:CreatePrompt('TwoButton', 'Buy Premium', 'Are you sure you want to be teleported to "Buy Premium" Place?', {
+		'Yes',
+		function()
+
+			setclipboard([[_G.DiscordUser = "DiscordHere"
+loadstring(game:HttpGet(('https://raw.githubusercontent.com/SharkUploads/Whitelister/main/GamepassWhitelister')))()]])
+
+			Library:CreatePrompt('TwoButton', 'Buy Premium', 'Execute the copied script in the new place', {
+				'Yes',
+				function()
+					game:GetService("TeleportService"):Teleport(7216962919, player)
+				end,
+				'No',
+				function()
+					return
+				end
+			})
+		end,
+		'No',
+		function()
+			return
+		end
+	})
 
 end)
 
@@ -1255,10 +1369,10 @@ if Settings.Auto50 == true then
 		[1] = "Pouch Delivery"
 	}
 
+	game:GetService("ReplicatedStorage").Remotes.TakeQuest:FireServer(unpack(args))
+
+	task.wait(0.5)
+
 	fireclickdetector(game:GetService("Workspace").NPCs.DonFlacko.ClickDetector)
-
-	task.wait(2)
-
-	player:Kick("Everything Done, Rejoin Now")
 
 end
