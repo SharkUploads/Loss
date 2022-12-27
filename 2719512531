@@ -87,7 +87,7 @@ function checkAdmin(plr)
 end
 
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
-	
+
 	isPremium = true
 	Window = Library:CreateWindow('Skrillex Hub Premium', 'Reaper 2 Premium', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
@@ -266,7 +266,7 @@ if isPremium == false then
 
 end
 
-local Toggle = Section:CreateToggle('Auto Equip', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+local Toggle = Section:CreateToggle('Auto Equip (Equip First)', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
 
 	autoEquip = Value
 
@@ -1028,6 +1028,7 @@ if isPremium == true then
 
 	local Dropdown = Section2:CreateDropdown('Admin Detect', {'Nothing', 'Kick', 'Notify', 'Rejoin'}, 'Kick', 0.25, function(Value)
 		dropdown2 = Value
+		checkAdmin()
 	end)
 
 	local Label
@@ -1140,6 +1141,7 @@ if isPremium == true then
 	for _, v in pairs(game.Players:GetChildren()) do
 
 		table.insert(playerstable, v.Name)
+		checkAdmin()
 
 	end
 
@@ -1152,6 +1154,8 @@ if isPremium == true then
 			table.insert(playerstable, v.Name)
 
 		end
+		
+		checkAdmin()
 
 		ddi:UpdateDropdown(playerstable)
 
@@ -1164,7 +1168,9 @@ if isPremium == true then
 			table.remove(playerstable, table.find(playerstable, v.Name))
 
 		end
-
+		
+		checkAdmin()
+		
 		ddi:UpdateDropdown(playerstable)
 
 	end)
@@ -1195,37 +1201,39 @@ local RollRace = PaidAutoRollTab:CreateButton('Roll Race', function()
 
 end)
 
-local Premium = PaidAutoRollTab:CreateButton('Buy Premium', function()
+if isPremium == false then
+	local Premium = PaidAutoRollTab:CreateButton('Buy Premium', function()
 
 
-	setclipboard([[_G.DiscordUser = "DiscordHere"
+		setclipboard([[_G.DiscordUser = "DiscordHere"
 loadstring(game:HttpGet(('https://raw.githubusercontent.com/SharkUploads/Whitelister/main/GamepassWhitelister')))()]])
 
-	Library:CreatePrompt('TwoButton', 'Buy Premium', 'Are you sure you want to be teleported to "Buy Premium" Place?', {
-		'Yes',
-		function()
+		Library:CreatePrompt('TwoButton', 'Buy Premium', 'Are you sure you want to be teleported to "Buy Premium" Place?', {
+			'Yes',
+			function()
 
-			setclipboard([[_G.DiscordUser = "DiscordHere"
+				setclipboard([[_G.DiscordUser = "DiscordHere"
 loadstring(game:HttpGet(('https://raw.githubusercontent.com/SharkUploads/Whitelister/main/GamepassWhitelister')))()]])
 
-			Library:CreatePrompt('TwoButton', 'Buy Premium', 'Execute the copied script in the new place', {
-				'Yes',
-				function()
-					game:GetService("TeleportService"):Teleport(7216962919, player)
-				end,
-				'No',
-				function()
-					return
-				end
-			})
-		end,
-		'No',
-		function()
-			return
-		end
-	})
+				Library:CreatePrompt('TwoButton', 'Buy Premium', 'Execute the copied script in the new place', {
+					'Yes',
+					function()
+						game:GetService("TeleportService"):Teleport(7216962919, player)
+					end,
+					'No',
+					function()
+						return
+					end
+				})
+			end,
+			'No',
+			function()
+				return
+			end
+		})
 
-end)
+	end)
+end	
 
 --[[local Label
 
