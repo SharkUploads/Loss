@@ -1154,7 +1154,7 @@ if isPremium == true then
 			table.insert(playerstable, v.Name)
 
 		end
-		
+
 		checkAdmin()
 
 		ddi:UpdateDropdown(playerstable)
@@ -1168,9 +1168,9 @@ if isPremium == true then
 			table.remove(playerstable, table.find(playerstable, v.Name))
 
 		end
-		
+
 		checkAdmin()
-		
+
 		ddi:UpdateDropdown(playerstable)
 
 	end)
@@ -1265,6 +1265,10 @@ local SettingsTab = Window:CreateTab('Settings', false, 'rbxassetid://3926305904
 local SectionSettings = SettingsTab:CreateSection('General')
 
 local isClosed = false
+
+local Keybind1 = SectionSettings:CreateKeybind('Key To Toggle UI', "RightControl", function()
+	Library:ToggleUI()
+end)
 
 local Transparency = SectionSettings:CreateTextbox('Transparency (Restart)', Settings.BaseTransparency, function(Value)
 
