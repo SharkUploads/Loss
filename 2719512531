@@ -24,7 +24,8 @@ local DefaultSettings = {
 	Mode = "",
 	LowHp = "",
 	Method = "Behind",
-
+	CloseUI = "RightControl",
+	
 }
 
 local Settings
@@ -1266,7 +1267,7 @@ local SectionSettings = SettingsTab:CreateSection('General')
 
 local isClosed = false
 
-local Keybind1 = SectionSettings:CreateKeybind('Key To Toggle UI', "RightControl", function()
+local Keybind1 = SectionSettings:CreateKeybind('Key To Toggle UI', Settings.CloseUI, function()
 	Library:ToggleUI()
 end)
 
