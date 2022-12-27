@@ -1007,7 +1007,7 @@ if isPremium == true then
 
 	end)
 
-	local Input = Section2:CreateTextbox('Mode When Low Hp', Settings.Mode, function(Value)
+	local Input = Section2:CreateTextbox('Mode Name', Settings.Mode, function(Value)
 
 		mode = Value
 		Settings.Mode = mode
