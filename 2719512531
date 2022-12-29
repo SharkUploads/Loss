@@ -849,10 +849,10 @@ if isPremium == true then
 		Save()
 	end)
 
-	aQuest = Section:CreateToggle('Auto Quest', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+	--[[aQuest = Section:CreateToggle('Auto Quest', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
 		autoQuest = Value
 		autoFarm = Value
-	end)
+	end)--]]
 
 	local Toggle = Section:CreateToggle('Reiatsu Reset', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
 		resetIfLowReiatsu = Value
@@ -897,10 +897,21 @@ if isPremium == true then
 		end
 	end)
 
-	local autoLv050 = Section:CreateToggle('Auto Level 50', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
-		Settings.Auto50 = true
-		Save()
-		game:GetService("TeleportService"):Teleport(8934886191, player)
+	local autoLv050 = Section:CreateToggle('Instant Level 50', false, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
+		
+		Library:CreatePrompt('TwoButton', 'READ CAREFULLY', 'If you press "Yes" you will be teleported, once you load in re-execute the script and wait some seconds', {
+			'Yes',
+			function()
+				Settings.Auto50 = true
+				Save()
+				game:GetService("TeleportService"):Teleport(8934886191, player)
+			end,
+			'No',
+			function()
+				return
+			end
+		})
+		
 	end)
 
 	for _, v in pairs(game.Workspace.Living:GetChildren()) do
