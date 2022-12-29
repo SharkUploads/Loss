@@ -1393,5 +1393,9 @@ if Settings.Auto50 == true then
 	task.wait(0.5)
 
 	fireclickdetector(game:GetService("Workspace").NPCs.DonFlacko.ClickDetector)
+	
+	task.wait(0.5)
+	
+	player:Kick("All done, you can play now")
 
 end
