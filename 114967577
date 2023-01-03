@@ -67,12 +67,12 @@ local succ, err = pcall(function()
 
 	if theKey.CheckPaid(game.Players.LocalPlayer) == true then
 
-		Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexHub", IntroText = "Skrillex Hub Premium"})
+		Window = OrionLib:MakeWindow({Name = "Azure Hub - Dragon Ball Final Remastered", HidePremium = false, SaveConfig = true, ConfigFolder = "SkrillexHub", IntroText = "Skrillex Hub Premium"})
 		isPremium = true
 
 	else
 
-		Window = OrionLib:MakeWindow({Name = "Skrillex - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexHub", IntroText = "Skrillex Hub"})
+		Window = OrionLib:MakeWindow({Name = "Azure Hub - Dragon Ball Final Remastered", HidePremium = true, SaveConfig = true, ConfigFolder = "SkrillexHub", IntroText = "Skrillex Hub"})
 
 
 	end
