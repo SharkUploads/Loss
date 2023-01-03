@@ -90,11 +90,11 @@ end
 if theKey.CheckPaid(game.Players.LocalPlayer) == true then
 
 	isPremium = true
-	Window = Library:CreateWindow('Skrillex Hub Premium', 'Reaper 2 Premium', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
+	Window = Library:CreateWindow('Azure Hub Premium', 'Reaper 2 Premium', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
 else
 
-	Window = Library:CreateWindow('Skrillex Hub', 'Reaper 2', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
+	Window = Library:CreateWindow('Azure Hub', 'Reaper 2', 'Skrillex Hub', '', true, 'SkrillexHubReaper2', 'Default')
 
 end
 
